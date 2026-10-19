@@ -4,13 +4,15 @@ identity:
   label:
     en_US: List Posts
     zh_Hans: 查询帖子列表
+    ja_JP: 投稿一覧を取得
 description:
   human:
-    en_US: List one page of Buffer posts. Use has_next_page and pass end_cursor as
-      after for the next page. Reset after when filters change.
-    zh_Hans: 按账号、状态和时间查询帖子，支持游标分页。
-  llm: List one page of Buffer posts. Use has_next_page and pass end_cursor as after
-    for the next page. Reset after when filters change.
+    en_US: List one page of Buffer posts. Use has_next_page and pass end_cursor as after for the next page. Reset
+      after when filters change.
+    zh_Hans: 查询一页 Buffer 帖子。根据 has_next_page 判断是否还有结果，将 end_cursor 作为下一页的 after；修改筛选条件时重置 after。
+    ja_JP: Bufferの投稿を1ページ取得します。has_next_pageを確認し、次ページではend_cursorをafterに指定します。絞り込み条件を変更する場合はafterをリセットしてください。
+  llm: List one page of Buffer posts. Use has_next_page and pass end_cursor as after for the next page. Reset after
+    when filters change.
 parameters:
 - name: organization_id
   type: string
@@ -18,9 +20,11 @@ parameters:
   label:
     en_US: Organization ID
     zh_Hans: 组织 ID
+    ja_JP: 組織ID
   human_description:
     en_US: Buffer organization ID from list_organizations.
-    zh_Hans: 组织 ID
+    zh_Hans: list_organizations 返回的 Buffer 组织 ID。
+    ja_JP: list_organizationsで取得したBufferの組織ID。
   llm_description: Buffer organization ID from list_organizations.
   form: llm
 - name: channel_ids_json
@@ -29,12 +33,12 @@ parameters:
   label:
     en_US: Channel IDs (JSON)
     zh_Hans: 社交账号 ID 列表（JSON）
+    ja_JP: ソーシャルアカウントID一覧（JSON）
   human_description:
-    en_US: Optional JSON array of channel IDs, e.g. ["channel-1","channel-2"]. Omit
-      for all accessible channels.
-    zh_Hans: 社交账号 ID 列表（JSON）
-  llm_description: Optional JSON array of channel IDs, e.g. ["channel-1","channel-2"].
-    Omit for all accessible channels.
+    en_US: Optional JSON array of channel IDs, e.g. ["channel-1","channel-2"]. Omit for all accessible channels.
+    zh_Hans: 可选的社交账号 ID JSON 数组，例如 ["channel-1","channel-2"]。省略时查询全部可访问的账号。
+    ja_JP: 任意のソーシャルアカウントIDのJSON配列。例：["channel-1","channel-2"]。省略すると、アクセス可能なすべてのアカウントを対象にします。
+  llm_description: Optional JSON array of channel IDs, e.g. ["channel-1","channel-2"]. Omit for all accessible channels.
   form: llm
 - name: status
   type: select
@@ -42,9 +46,11 @@ parameters:
   label:
     en_US: Status
     zh_Hans: 帖子状态
+    ja_JP: 投稿の状態
   human_description:
     en_US: Filter by post lifecycle status, or all.
-    zh_Hans: 帖子状态
+    zh_Hans: 按帖子的生命周期状态筛选；all 表示全部状态。
+    ja_JP: 投稿の状態で絞り込みます。allはすべての状態を対象にします。
   llm_description: Filter by post lifecycle status, or all.
   form: llm
   default: all
@@ -53,39 +59,48 @@ parameters:
     label:
       en_US: all
       zh_Hans: 全部
+      ja_JP: すべて
   - value: draft
     label:
       en_US: draft
       zh_Hans: 草稿
+      ja_JP: 下書き
   - value: scheduled
     label:
       en_US: scheduled
       zh_Hans: 已排期
+      ja_JP: 予約済み
   - value: sent
     label:
       en_US: sent
       zh_Hans: 已发布
+      ja_JP: 公開済み
   - value: error
     label:
       en_US: error
       zh_Hans: 发布失败
+      ja_JP: 公開失敗
   - value: sending
     label:
       en_US: sending
       zh_Hans: 发布中
+      ja_JP: 公開中
   - value: needs_approval
     label:
       en_US: needs_approval
       zh_Hans: 待审批
+      ja_JP: 承認待ち
 - name: first
   type: number
   required: false
   label:
     en_US: Page Size
     zh_Hans: 每页数量
+    ja_JP: 1ページの件数
   human_description:
     en_US: Integer from 1 to 100. Default 20.
-    zh_Hans: 每页数量
+    zh_Hans: 1 至 100 的整数，默认 20。
+    ja_JP: 1から100までの整数。既定値は20です。
   llm_description: Integer from 1 to 100. Default 20.
   form: llm
   default: 20
@@ -95,9 +110,11 @@ parameters:
   label:
     en_US: After Cursor
     zh_Hans: 分页游标
+    ja_JP: 次ページのカーソル
   human_description:
     en_US: Opaque end_cursor from the preceding page. Omit for the first page.
-    zh_Hans: 分页游标
+    zh_Hans: 原样传入上一页返回的 end_cursor。第一页请省略。
+    ja_JP: 前ページのend_cursorをそのまま指定します。最初のページでは省略してください。
   llm_description: Opaque end_cursor from the preceding page. Omit for the first page.
   form: llm
 - name: start_date
@@ -106,12 +123,12 @@ parameters:
   label:
     en_US: Start Date
     zh_Hans: 开始时间
+    ja_JP: 開始日時
   human_description:
-    en_US: Optional ISO 8601 timestamp with timezone. Buffer filters createdAt or
-      dueAt after this value.
-    zh_Hans: 开始时间
-  llm_description: Optional ISO 8601 timestamp with timezone. Buffer filters createdAt
-    or dueAt after this value.
+    en_US: Optional ISO 8601 timestamp with timezone. Buffer filters createdAt or dueAt after this value.
+    zh_Hans: 可选的含时区 ISO 8601 时间。Buffer 按此时间之后的 createdAt 或 dueAt 筛选。
+    ja_JP: 任意のタイムゾーン付きISO 8601日時。Bufferはこの日時より後のcreatedAtまたはdueAtで絞り込みます。
+  llm_description: Optional ISO 8601 timestamp with timezone. Buffer filters createdAt or dueAt after this value.
   form: llm
 - name: end_date
   type: string
@@ -119,12 +136,12 @@ parameters:
   label:
     en_US: End Date
     zh_Hans: 结束时间
+    ja_JP: 終了日時
   human_description:
-    en_US: Optional ISO 8601 timestamp with timezone. Buffer filters createdAt or
-      dueAt before this value.
-    zh_Hans: 结束时间
-  llm_description: Optional ISO 8601 timestamp with timezone. Buffer filters createdAt
-    or dueAt before this value.
+    en_US: Optional ISO 8601 timestamp with timezone. Buffer filters createdAt or dueAt before this value.
+    zh_Hans: 可选的含时区 ISO 8601 时间。Buffer 按此时间之前的 createdAt 或 dueAt 筛选。
+    ja_JP: 任意のタイムゾーン付きISO 8601日時。Bufferはこの日時より前のcreatedAtまたはdueAtで絞り込みます。
+  llm_description: Optional ISO 8601 timestamp with timezone. Buffer filters createdAt or dueAt before this value.
   form: llm
 output_schema:
   type: object

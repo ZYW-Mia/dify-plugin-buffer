@@ -3,13 +3,20 @@ type: plugin
 author: TenTen
 name: buffer
 repo: https://github.com/ZYW-Mia/dify-plugin-buffer
+contact: yawen@dify.ai
+privacy: PRIVACY.md
+network:
+  domains:
+  - api.buffer.com
+  - auth.buffer.com
 label:
   en_US: Buffer
   zh_Hans: Buffer
+  ja_JP: Buffer
 description:
-  en_US: 'Connect Dify agents to Buffer: discover channels, draft, schedule, and manage
-    social posts.'
+  en_US: 'Connect Dify agents to Buffer: discover channels, draft, schedule, and manage social posts.'
   zh_Hans: 连接 Dify 与 Buffer，查询社交账号，创建草稿、排期并管理帖子。
+  ja_JP: DifyエージェントをBufferに接続し、ソーシャルアカウントの取得、投稿の下書き作成・予約・管理を行います。
 icon: icon.png
 created_at: '2026-10-16T13:00:00Z'
 resource:

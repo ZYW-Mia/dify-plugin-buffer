@@ -4,15 +4,16 @@ identity:
   label:
     en_US: Schedule Post
     zh_Hans: 排期发帖
+    ja_JP: 投稿を予約
 description:
   human:
-    en_US: Create a NEW scheduled Buffer post. customScheduled requires a future due_at
-      with timezone; addToQueue and shareNext use the channel queue. To schedule an
-      EXISTING draft, call update_post with its post_id instead.
-    zh_Hans: 创建新的定时帖子或加入发布队列；已有草稿请使用更新帖子工具排期。
-  llm: Create a NEW scheduled Buffer post. customScheduled requires a future due_at
-    with timezone; addToQueue and shareNext use the channel queue. To schedule an
-    EXISTING draft, call update_post with its post_id instead.
+    en_US: Create a NEW scheduled Buffer post. customScheduled requires a future due_at with timezone; addToQueue
+      and shareNext use the channel queue. To schedule an EXISTING draft, call update_post with its post_id instead.
+    zh_Hans: 创建新的排期帖子。customScheduled 需要含时区的未来 due_at；addToQueue 和 shareNext 使用账号队列。如需排期已有草稿，请改用 update_post 并传入其
+      post_id。
+    ja_JP: 新しい予約投稿を作成します。customScheduledにはタイムゾーン付きの未来のdue_atが必要です。addToQueueとshareNextはアカウントのキューを使用します。既存の下書きを予約する場合は、そのpost_idを指定してupdate_postを実行してください。
+  llm: Create a NEW scheduled Buffer post. customScheduled requires a future due_at with timezone; addToQueue and
+    shareNext use the channel queue. To schedule an EXISTING draft, call update_post with its post_id instead.
 parameters:
 - name: channel_id
   type: string
@@ -20,9 +21,11 @@ parameters:
   label:
     en_US: Channel ID
     zh_Hans: 社交账号 ID
+    ja_JP: ソーシャルアカウントID
   human_description:
     en_US: Buffer channel ID from list_channels. Create one post per channel.
-    zh_Hans: 社交账号 ID
+    zh_Hans: 使用 list_channels 返回的社交账号 ID。每个账号单独创建一条帖子。
+    ja_JP: list_channelsで取得したBufferのソーシャルアカウントID。投稿はアカウントごとに作成します。
   llm_description: Buffer channel ID from list_channels. Create one post per channel.
   form: llm
 - name: text
@@ -31,12 +34,14 @@ parameters:
   label:
     en_US: Text
     zh_Hans: 帖子文案
+    ja_JP: 投稿本文
   human_description:
-    en_US: Post text. Required unless assets_json supplies media. For a thread, match
-      the first item in metadata thread.
-    zh_Hans: 帖子文案
-  llm_description: Post text. Required unless assets_json supplies media. For a thread,
-    match the first item in metadata thread.
+    en_US: Post text. Required unless assets_json supplies media. For a thread, match the first item in metadata
+      thread.
+    zh_Hans: 帖子文案；未通过 assets_json 提供媒体时必填。线程帖的本文须与 metadata 中的第一条内容一致。
+    ja_JP: 投稿本文。assets_jsonでメディアを指定しない場合は必須です。スレッドの場合は、メタデータ内の最初の投稿と本文を一致させてください。
+  llm_description: Post text. Required unless assets_json supplies media. For a thread, match the first item in
+    metadata thread.
   form: llm
 - name: assets_json
   type: string
@@ -44,14 +49,17 @@ parameters:
   label:
     en_US: Assets (JSON)
     zh_Hans: 媒体附件（JSON）
+    ja_JP: メディア添付（JSON）
   human_description:
-    en_US: JSON array of media assets, e.g. [{"image":{"url":"https://example.com/photo.jpg"}}].
-      Supports image, video, document. URLs must be publicly reachable by Buffer;
-      Dify file IDs and private URLs cannot be used. On update, [] removes all media.
-    zh_Hans: 媒体附件（JSON）
-  llm_description: JSON array of media assets, e.g. [{"image":{"url":"https://example.com/photo.jpg"}}].
-    Supports image, video, document. URLs must be publicly reachable by Buffer; Dify
-    file IDs and private URLs cannot be used. On update, [] removes all media.
+    en_US: JSON array of media assets, e.g. [{"image":{"url":"https://example.com/photo.jpg"}}]. Supports image,
+      video, document. URLs must be publicly reachable by Buffer; Dify file IDs and private URLs cannot be used.
+      On update, [] removes all media.
+    zh_Hans: 媒体附件 JSON 数组，例如 [{"image":{"url":"https://example.com/photo.jpg"}}]。支持图片、视频和文档。URL 必须可被 Buffer 公开访问，不能使用
+      Dify 文件 ID 或私有 URL。更新时传入 [] 可清空媒体。
+    ja_JP: メディアのJSON配列。例：[{"image":{"url":"https://example.com/photo.jpg"}}]。画像・動画・文書に対応します。Bufferからアクセスできる公開URLが必要です。DifyのファイルIDや非公開URLは使用できません。更新時に[]を指定すると、すべてのメディアを削除します。
+  llm_description: JSON array of media assets, e.g. [{"image":{"url":"https://example.com/photo.jpg"}}]. Supports
+    image, video, document. URLs must be publicly reachable by Buffer; Dify file IDs and private URLs cannot be
+    used. On update, [] removes all media.
   form: llm
 - name: metadata_json
   type: string
@@ -59,14 +67,14 @@ parameters:
   label:
     en_US: Platform Metadata (JSON)
     zh_Hans: 平台专属配置（JSON）
+    ja_JP: プラットフォーム別設定（JSON）
   human_description:
     en_US: Buffer PostInputMetaData JSON object for the target service, e.g. {"instagram":{"type":"post","shouldShareToFeed":true}}.
-      Required configuration varies by platform. Thread text must match its first
-      item.
-    zh_Hans: 平台专属配置（JSON）
-  llm_description: Buffer PostInputMetaData JSON object for the target service, e.g.
-    {"instagram":{"type":"post","shouldShareToFeed":true}}. Required configuration varies by platform. Thread
-    text must match its first item.
+      Required configuration varies by platform. Thread text must match its first item.
+    zh_Hans: 目标平台的 Buffer PostInputMetaData JSON 对象，例如 {"instagram":{"type":"post","shouldShareToFeed":true}}。各平台必填项不同；线程帖的本文须与第一条内容一致。
+    ja_JP: 対象サービスのBuffer PostInputMetaDataをJSONオブジェクトで指定します。例：{"instagram":{"type":"post","shouldShareToFeed":true}}。必須設定はサービスごとに異なります。スレッドの本文は最初の投稿と一致させてください。
+  llm_description: Buffer PostInputMetaData JSON object for the target service, e.g. {"instagram":{"type":"post","shouldShareToFeed":true}}.
+    Required configuration varies by platform. Thread text must match its first item.
   form: llm
 - name: tag_ids_json
   type: string
@@ -74,9 +82,11 @@ parameters:
   label:
     en_US: Tag IDs (JSON)
     zh_Hans: 标签 ID（JSON）
+    ja_JP: タグID（JSON）
   human_description:
     en_US: JSON array of Buffer tag IDs. On update, [] removes all tags.
-    zh_Hans: 标签 ID（JSON）
+    zh_Hans: Buffer 标签 ID 的 JSON 数组。更新时传入 [] 可清空全部标签。
+    ja_JP: BufferのタグIDのJSON配列。更新時に[]を指定すると、すべてのタグを削除します。
   llm_description: JSON array of Buffer tag IDs. On update, [] removes all tags.
   form: llm
 - name: ai_assisted
@@ -85,9 +95,11 @@ parameters:
   label:
     en_US: AI Assisted
     zh_Hans: AI 辅助生成
+    ja_JP: AIによる作成・編集
   human_description:
     en_US: Whether AI helped create or edit this content.
-    zh_Hans: AI 辅助生成
+    zh_Hans: 此内容是否使用 AI 辅助生成或编辑。
+    ja_JP: このコンテンツの作成または編集にAIを使用したかどうかを指定します。
   llm_description: Whether AI helped create or edit this content.
   form: llm
 - name: mode
@@ -96,14 +108,14 @@ parameters:
   label:
     en_US: Scheduling Mode
     zh_Hans: 排期模式
+    ja_JP: 公開スケジュール
   human_description:
-    en_US: draft saves without publishing; addToQueue uses the next queue slot; customScheduled
-      requires due_at; shareNext adds to the front of the queue; shareNow publishes
-      immediately; keep preserves existing scheduling.
-    zh_Hans: 排期模式
-  llm_description: draft saves without publishing; addToQueue uses the next queue
-    slot; customScheduled requires due_at; shareNext adds to the front of the queue;
-    shareNow publishes immediately; keep preserves existing scheduling.
+    en_US: draft saves without publishing; addToQueue uses the next queue slot; customScheduled requires due_at;
+      shareNext adds to the front of the queue; shareNow publishes immediately; keep preserves existing scheduling.
+    zh_Hans: draft 保存草稿；addToQueue 使用下一个队列时段；customScheduled 指定时间且需填写 due_at；shareNext 插入队首；shareNow 立即发布；keep 保留原排期。
+    ja_JP: draftは下書き保存、addToQueueは次のキュー枠、customScheduledは日時指定（due_at必須）、shareNextはキューの先頭、shareNowは即時公開です。keepは既存の公開スケジュールを維持します。
+  llm_description: draft saves without publishing; addToQueue uses the next queue slot; customScheduled requires
+    due_at; shareNext adds to the front of the queue; shareNow publishes immediately; keep preserves existing scheduling.
   form: llm
   default: customScheduled
   options:
@@ -111,26 +123,31 @@ parameters:
     label:
       en_US: Add to Queue
       zh_Hans: 加入队列
+      ja_JP: キューに追加
   - value: customScheduled
     label:
       en_US: Choose Date and Time
       zh_Hans: 指定发布时间
+      ja_JP: 公開日時を指定
   - value: shareNext
     label:
       en_US: Share Next
       zh_Hans: 插入队首
+      ja_JP: キューの先頭に追加
 - name: due_at
   type: string
   required: false
   label:
     en_US: Publish At
     zh_Hans: 发布时间
+    ja_JP: 公開日時
   human_description:
-    en_US: Future ISO 8601 timestamp with timezone, e.g. 2026-11-01T18:00:00+08:00.
-      Required for customScheduled; normalized to UTC.
-    zh_Hans: 发布时间
-  llm_description: Future ISO 8601 timestamp with timezone, e.g. 2026-11-01T18:00:00+08:00.
-    Required for customScheduled; normalized to UTC.
+    en_US: Future ISO 8601 timestamp with timezone, e.g. 2026-11-01T18:00:00+08:00. Required for customScheduled;
+      normalized to UTC.
+    zh_Hans: 包含时区的未来 ISO 8601 时间，例如 2026-11-01T18:00:00+08:00。customScheduled 模式必填，发送前转换为 UTC。
+    ja_JP: タイムゾーンを含む未来のISO 8601日時。例：2026-11-01T18:00:00+08:00。customScheduledでは必須です。UTCに変換して送信します。
+  llm_description: Future ISO 8601 timestamp with timezone, e.g. 2026-11-01T18:00:00+08:00. Required for customScheduled;
+    normalized to UTC.
   form: llm
 - name: scheduling_type
   type: select
@@ -138,22 +155,24 @@ parameters:
   label:
     en_US: Publishing Method
     zh_Hans: 发布方式
+    ja_JP: 公開方法
   human_description:
-    en_US: automatic publishes through Buffer; notification sends a reminder requiring
-      manual publishing.
-    zh_Hans: 发布方式
-  llm_description: automatic publishes through Buffer; notification sends a reminder
-    requiring manual publishing.
+    en_US: automatic publishes through Buffer; notification sends a reminder requiring manual publishing.
+    zh_Hans: automatic 通过 Buffer 自动发布；notification 发送提醒，需要人工完成发布。
+    ja_JP: automaticはBufferによる自動公開、notificationは手動公開が必要なリマインダーを送信します。
+  llm_description: automatic publishes through Buffer; notification sends a reminder requiring manual publishing.
   form: llm
   options:
   - value: automatic
     label:
       en_US: Automatic
       zh_Hans: 自动发布
+      ja_JP: 自動公開
   - value: notification
     label:
       en_US: Reminder
       zh_Hans: 提醒手动发布
+      ja_JP: 手動公開のリマインダー
 output_schema:
   type: object
   properties:

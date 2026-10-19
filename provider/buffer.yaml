@@ -4,10 +4,11 @@ identity:
   label:
     en_US: Buffer
     zh_Hans: Buffer
+    ja_JP: Buffer
   description:
-    en_US: 'Connect Dify agents to Buffer: discover channels, draft, schedule, and
-      manage social posts.'
+    en_US: 'Connect Dify agents to Buffer: discover channels, draft, schedule, and manage social posts.'
     zh_Hans: 连接 Dify 与 Buffer，查询社交账号，创建草稿、排期并管理帖子。
+    ja_JP: DifyエージェントをBufferに接続し、ソーシャルアカウントの取得、投稿の下書き作成・予約・管理を行います。
   icon: icon.png
 credentials_for_provider:
   api_key:
@@ -16,12 +17,15 @@ credentials_for_provider:
     label:
       en_US: Personal API Key
       zh_Hans: 个人 API Key
+      ja_JP: 個人用APIキー
     placeholder:
       en_US: Enter your Buffer personal API key
       zh_Hans: 输入 Buffer 个人 API Key
+      ja_JP: Bufferの個人用APIキーを入力
     help:
       en_US: For personal workflows. Use OAuth when connecting other users.
       zh_Hans: 用于个人工作流；面向其他用户的集成请使用 OAuth。
+      ja_JP: 個人用ワークフロー向けです。他のユーザーのアカウントを接続する場合はOAuthを使用してください。
     url: https://publish.buffer.com/settings/api
 oauth_schema:
   client_schema:
@@ -31,6 +35,7 @@ oauth_schema:
     label:
       en_US: Client ID
       zh_Hans: 客户端 ID
+      ja_JP: クライアントID
     url: https://developers.buffer.com/guides/building-apps
   - name: client_secret
     type: secret-input
@@ -38,20 +43,24 @@ oauth_schema:
     label:
       en_US: Client Secret
       zh_Hans: 客户端密钥
+      ja_JP: クライアントシークレット
     help:
       en_US: Register a private (confidential) Buffer app client.
       zh_Hans: 请注册 Buffer 私有（机密）应用客户端。
+      ja_JP: Bufferで非公開（confidential）のアプリクライアントを登録してください。
   credentials_schema:
   - name: access_token
     type: secret-input
     label:
       en_US: Access Token
       zh_Hans: 访问令牌
+      ja_JP: アクセストークン
   - name: refresh_token
     type: secret-input
     label:
       en_US: Refresh Token
       zh_Hans: 刷新令牌
+      ja_JP: リフレッシュトークン
 tools:
 - tools/list_organizations.yaml
 - tools/list_channels.yaml

@@ -4,13 +4,13 @@ identity:
   label:
     en_US: List Organizations
     zh_Hans: 查询组织
+    ja_JP: 組織一覧を取得
 description:
   human:
-    en_US: List Buffer organizations available to the connected account. Start here
-      to obtain organization_id.
-    zh_Hans: 查询当前 Buffer 账号可访问的组织，获取组织 ID。
-  llm: List Buffer organizations available to the connected account. Start here to
-    obtain organization_id.
+    en_US: List Buffer organizations available to the connected account. Start here to obtain organization_id.
+    zh_Hans: 查询当前授权账号可访问的 Buffer 组织。请先调用本工具取得 organization_id。
+    ja_JP: 接続中のアカウントがアクセスできるBufferの組織一覧を取得します。最初に実行してorganization_idを確認してください。
+  llm: List Buffer organizations available to the connected account. Start here to obtain organization_id.
 parameters: []
 output_schema:
   type: object

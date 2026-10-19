@@ -4,9 +4,11 @@ Community-maintained by **TenTen**.
 
 A Dify Tool Plugin for turning approved content into social posts through Buffer's GraphQL API. Connect with Buffer OAuth 2.0 (PKCE S256) or a personal API key.
 
-[中文使用说明](readme/README_zh_Hans.md)
+English · [Simplified Chinese](readme/README_zh_Hans.md) · [Japanese](readme/README_ja_JP.md)
 
-[Download v0.1.0](https://github.com/ZYW-Mia/dify-plugin-buffer/releases/tag/v0.1.0) · [Workflow template](examples/buffer-social-copilot.yml) · [Template setup](examples/README.md)
+Plugin labels, tool parameters, help text, and authorization fields support English, Simplified Chinese, and Japanese. Dify selects the interface language; tool identifiers and API values stay consistent across locales.
+
+[Download v0.1.0](https://github.com/ZYW-Mia/dify-plugin-buffer/releases/tag/v0.1.0) · [Workflow template](https://github.com/ZYW-Mia/dify-plugin-buffer/blob/main/examples/buffer-social-copilot.yml) · [Template setup](https://github.com/ZYW-Mia/dify-plugin-buffer/blob/main/examples/README.md)
 
 ## Tools
 
@@ -54,7 +56,7 @@ For your own account, create a key at [Buffer Settings → API](https://publish.
 
 ### Import the reusable template
 
-[Dify Content to Buffer](examples/README.md) includes the importable [workflow DSL](examples/buffer-social-copilot.yml). Choose Original Content or AI Assistant, optionally attach an image, then review the content and select a connected account and delivery method in one Human Input form. Maximum characters is optional; leaving it blank sets no drafting limit. The template supports drafts, queues, scheduling, and immediate publishing for X, Bluesky, and LinkedIn.
+[Dify Content to Buffer](https://github.com/ZYW-Mia/dify-plugin-buffer/blob/main/examples/README.md) includes the importable [workflow DSL](https://github.com/ZYW-Mia/dify-plugin-buffer/blob/main/examples/buffer-social-copilot.yml). Choose Original Content or AI Assistant, optionally attach an image, then review the content and select a connected account and delivery method in one Human Input form. Maximum characters is optional; leaving it blank sets no drafting limit. The template supports drafts, queues, scheduling, and immediate publishing for X, Bluesky, and LinkedIn.
 
 ### Create a draft for review
 
@@ -139,7 +141,7 @@ For a read-only real API check, set `BUFFER_API_KEY` in your environment and run
 
 The SDK loads all eight tools. Automated tests cover HTTP/GraphQL errors, safe draft defaults, edit preservation, pagination, timezone normalization, PKCE exchange, expiring/tampered state, token rotation, and a simulated tool lifecycle. Operations and generated inputs are checked against a focused snapshot of Buffer's official API contract retrieved on October 16, 2026.
 
-Workflow previews have read real Buffer organizations and connected accounts in Dify Cloud. The current **TenTen 0.1.0** package still needs a fresh installation, OAuth reconnection, and end-to-end write verification under its new author namespace. Complete the [manual integration checklist](docs/integration-checklist.md) before Marketplace submission.
+Workflow previews have read real Buffer organizations and connected accounts in Dify Cloud. The current **TenTen 0.1.0** package still needs a fresh installation, OAuth reconnection, and end-to-end write verification under its new author namespace. See the remaining checks in the [manual integration checklist](docs/integration-checklist.md).
 
 ## Scope and Buffer Commit
 
@@ -152,3 +154,7 @@ The included template uses the plugin as its tool layer: produce content → dis
 ## License and privacy
 
 MIT. See [LICENSE](LICENSE) and [PRIVACY.md](PRIVACY.md). This is an independent integration and is not an official Buffer product.
+
+## Source and support
+
+Source: [ZYW-Mia/dify-plugin-buffer](https://github.com/ZYW-Mia/dify-plugin-buffer). Report bugs or request help through [GitHub Issues](https://github.com/ZYW-Mia/dify-plugin-buffer/issues) or contact [yawen@dify.ai](mailto:yawen@dify.ai). Do not include tokens, client secrets, or private post content in public reports.

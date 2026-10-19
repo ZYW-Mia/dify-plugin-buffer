@@ -2,6 +2,10 @@
 
 由社区创作者 **TenTen** 维护。
 
+[English](../README.md) · 简体中文 · [日本語](README_ja_JP.md)
+
+插件名称、工具参数、帮助说明和授权字段支持英文、简体中文和日文，随 Dify 界面语言显示。工具标识和 API 枚举值保持一致。
+
 通过 Buffer OAuth 2.0 + PKCE 或个人 API Key，在 Dify Agent / Workflow 中查询社交账号、创建草稿、排期和管理帖子。
 
 ## 安装和授权
@@ -34,7 +38,9 @@ OAuth 客户端需要由 Dify 实例管理员配置，安装插件不会自动�
 
 ## 给 Template 的推荐调用顺序
 
-`list_organizations` → `list_channels` → AI 生成各平台文案 → `create_post(mode=draft)` → 人工审核 → `update_post` 排期已有草稿 → `get_post` 查询状态。
+仓库中的英文 [Workflow 模板](https://github.com/ZYW-Mia/dify-plugin-buffer/blob/main/examples/README.md) 支持：原始内容或 AI 生成素材 → 查询组织和已连接账号 → Human Input 审核内容、选择账号和发布方式 → 执行已确认的 Buffer 操作。开始时可上传一张配图，Maximum characters 留空表示不设置生成字数上限。
+
+如果需要先在 Buffer 保存草稿再审核，可使用 `create_post(mode=draft)` → 人工审核 → `update_post` 排期已有草稿 → `get_post` 查询状态。
 
 用 `update_post` 排期已有草稿可以避免重复创建帖子。示例：
 
@@ -74,4 +80,4 @@ OAuth 客户端需要由 Dify 实例管理员配置，安装插件不会自动�
 
 Buffer API 的分析数据当前仅对个人 API Key 开放，OAuth App Client 无权读取，因此首版没有提供分析工具。请求超时后先查询帖子状态再重试，避免重复发帖。
 
-开发、打包、隐私说明及完整示例见 [英文 README](../README.md)。Template 由你后续制作，本工程只提供插件。
+开发、打包、隐私说明及完整示例见 [英文 README](../README.md)。源码与问题反馈见 [GitHub 仓库](https://github.com/ZYW-Mia/dify-plugin-buffer) 和 [Issues](https://github.com/ZYW-Mia/dify-plugin-buffer/issues)。请勿在公开反馈中附上令牌、客户端密钥或私密帖子内容。

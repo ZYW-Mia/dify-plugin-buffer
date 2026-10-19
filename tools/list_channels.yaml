@@ -4,13 +4,15 @@ identity:
   label:
     en_US: List Channels
     zh_Hans: 查询社交账号
+    ja_JP: ソーシャルアカウント一覧を取得
 description:
   human:
-    en_US: List connected social channels in a Buffer organization, including service,
-      timezone, and connection/queue status. Use returned IDs instead of guessing.
-    zh_Hans: 查询组织的社交账号、平台、时区、连接和队列状态。
-  llm: List connected social channels in a Buffer organization, including service,
-    timezone, and connection/queue status. Use returned IDs instead of guessing.
+    en_US: List connected social channels in a Buffer organization, including service, timezone, and connection/queue
+      status. Use returned IDs instead of guessing.
+    zh_Hans: 查询 Buffer 组织已连接的社交账号，包括平台、时区、连接和队列状态。请使用返回的账号 ID，不要猜测。
+    ja_JP: Bufferの組織に接続されているソーシャルアカウントを取得します。プラットフォーム、タイムゾーン、接続状態、キューの状態を含みます。IDは推測せず、取得結果の値を使用してください。
+  llm: List connected social channels in a Buffer organization, including service, timezone, and connection/queue
+    status. Use returned IDs instead of guessing.
 parameters:
 - name: organization_id
   type: string
@@ -18,9 +20,11 @@ parameters:
   label:
     en_US: Organization ID
     zh_Hans: 组织 ID
+    ja_JP: 組織ID
   human_description:
     en_US: Buffer organization ID from list_organizations.
-    zh_Hans: 组织 ID
+    zh_Hans: list_organizations 返回的 Buffer 组织 ID。
+    ja_JP: list_organizationsで取得したBufferの組織ID。
   llm_description: Buffer organization ID from list_organizations.
   form: llm
 output_schema:

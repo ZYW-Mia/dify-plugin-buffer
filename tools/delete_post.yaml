@@ -4,15 +4,15 @@ identity:
   label:
     en_US: Delete Post
     zh_Hans: 删除帖子
+    ja_JP: 投稿を削除
 description:
   human:
-    en_US: Delete a Buffer post by ID, removing its draft or cancelling its queued
-      publication. Deletion is permanent. This does not promise removal of a post
-      already published on the social network.
-    zh_Hans: 永久删除 Buffer 草稿或取消排期；不保证删除社交平台上已发布的内容。
-  llm: Delete a Buffer post by ID, removing its draft or cancelling its queued publication.
-    Deletion is permanent. This does not promise removal of a post already published
-    on the social network.
+    en_US: Delete a Buffer post by ID, removing its draft or cancelling its queued publication. Deletion is permanent.
+      This does not promise removal of a post already published on the social network.
+    zh_Hans: 按 ID 永久删除 Buffer 帖子，移除草稿或取消队列中的发布。删除不可恢复，不保证删除已发布到社交平台的内容。
+    ja_JP: IDを指定してBufferの投稿を完全に削除します。下書きを削除するか、キュー内の公開予定を取り消します。この操作は元に戻せません。ソーシャルネットワークで公開済みの投稿が削除されることは保証しません。
+  llm: Delete a Buffer post by ID, removing its draft or cancelling its queued publication. Deletion is permanent.
+    This does not promise removal of a post already published on the social network.
 parameters:
 - name: post_id
   type: string
@@ -20,9 +20,11 @@ parameters:
   label:
     en_US: Post ID
     zh_Hans: 帖子 ID
+    ja_JP: 投稿ID
   human_description:
     en_US: Buffer post ID returned by create_post, schedule_post, or list_posts.
-    zh_Hans: 帖子 ID
+    zh_Hans: create_post、schedule_post 或 list_posts 返回的 Buffer 帖子 ID。
+    ja_JP: create_post、schedule_post、list_postsで取得したBufferの投稿ID。
   llm_description: Buffer post ID returned by create_post, schedule_post, or list_posts.
   form: llm
 output_schema:
