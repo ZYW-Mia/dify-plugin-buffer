@@ -1,0 +1,181 @@
+identity:
+  name: list_posts
+  author: TenTen
+  label:
+    en_US: List Posts
+    zh_Hans: 查询帖子列表
+description:
+  human:
+    en_US: List one page of Buffer posts. Use has_next_page and pass end_cursor as
+      after for the next page. Reset after when filters change.
+    zh_Hans: 按账号、状态和时间查询帖子，支持游标分页。
+  llm: List one page of Buffer posts. Use has_next_page and pass end_cursor as after
+    for the next page. Reset after when filters change.
+parameters:
+- name: organization_id
+  type: string
+  required: true
+  label:
+    en_US: Organization ID
+    zh_Hans: 组织 ID
+  human_description:
+    en_US: Buffer organization ID from list_organizations.
+    zh_Hans: 组织 ID
+  llm_description: Buffer organization ID from list_organizations.
+  form: llm
+- name: channel_ids_json
+  type: string
+  required: false
+  label:
+    en_US: Channel IDs (JSON)
+    zh_Hans: 社交账号 ID 列表（JSON）
+  human_description:
+    en_US: Optional JSON array of channel IDs, e.g. ["channel-1","channel-2"]. Omit
+      for all accessible channels.
+    zh_Hans: 社交账号 ID 列表（JSON）
+  llm_description: Optional JSON array of channel IDs, e.g. ["channel-1","channel-2"].
+    Omit for all accessible channels.
+  form: llm
+- name: status
+  type: select
+  required: false
+  label:
+    en_US: Status
+    zh_Hans: 帖子状态
+  human_description:
+    en_US: Filter by post lifecycle status, or all.
+    zh_Hans: 帖子状态
+  llm_description: Filter by post lifecycle status, or all.
+  form: llm
+  default: all
+  options:
+  - value: all
+    label:
+      en_US: all
+      zh_Hans: 全部
+  - value: draft
+    label:
+      en_US: draft
+      zh_Hans: 草稿
+  - value: scheduled
+    label:
+      en_US: scheduled
+      zh_Hans: 已排期
+  - value: sent
+    label:
+      en_US: sent
+      zh_Hans: 已发布
+  - value: error
+    label:
+      en_US: error
+      zh_Hans: 发布失败
+  - value: sending
+    label:
+      en_US: sending
+      zh_Hans: 发布中
+  - value: needs_approval
+    label:
+      en_US: needs_approval
+      zh_Hans: 待审批
+- name: first
+  type: number
+  required: false
+  label:
+    en_US: Page Size
+    zh_Hans: 每页数量
+  human_description:
+    en_US: Integer from 1 to 100. Default 20.
+    zh_Hans: 每页数量
+  llm_description: Integer from 1 to 100. Default 20.
+  form: llm
+  default: 20
+- name: after
+  type: string
+  required: false
+  label:
+    en_US: After Cursor
+    zh_Hans: 分页游标
+  human_description:
+    en_US: Opaque end_cursor from the preceding page. Omit for the first page.
+    zh_Hans: 分页游标
+  llm_description: Opaque end_cursor from the preceding page. Omit for the first page.
+  form: llm
+- name: start_date
+  type: string
+  required: false
+  label:
+    en_US: Start Date
+    zh_Hans: 开始时间
+  human_description:
+    en_US: Optional ISO 8601 timestamp with timezone. Buffer filters createdAt or
+      dueAt after this value.
+    zh_Hans: 开始时间
+  llm_description: Optional ISO 8601 timestamp with timezone. Buffer filters createdAt
+    or dueAt after this value.
+  form: llm
+- name: end_date
+  type: string
+  required: false
+  label:
+    en_US: End Date
+    zh_Hans: 结束时间
+  human_description:
+    en_US: Optional ISO 8601 timestamp with timezone. Buffer filters createdAt or
+      dueAt before this value.
+    zh_Hans: 结束时间
+  llm_description: Optional ISO 8601 timestamp with timezone. Buffer filters createdAt
+    or dueAt before this value.
+  form: llm
+output_schema:
+  type: object
+  properties:
+    posts:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          text:
+            type: string
+          channelId:
+            type: string
+          channelService:
+            type: string
+          status:
+            type: string
+          dueAt:
+            type:
+            - string
+            - 'null'
+          sentAt:
+            type:
+            - string
+            - 'null'
+          shareMode:
+            type: string
+          schedulingType:
+            type:
+            - string
+            - 'null'
+          externalLink:
+            type:
+            - string
+            - 'null'
+          createdAt:
+            type: string
+          updatedAt:
+            type: string
+          error:
+            type:
+            - object
+            - 'null'
+    count:
+      type: integer
+    has_next_page:
+      type: boolean
+    end_cursor:
+      type: string
+extra:
+  python:
+    source: tools/list_posts.py

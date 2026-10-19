@@ -1,0 +1,1350 @@
+app:
+  description: Produce one content asset with OpenAI or use original content. Review once, choose a connected Buffer
+    account, and save, queue, schedule, or publish.
+  icon: 7bfe09fb-6b30-4752-b7ed-2caf8194b843
+  icon_background: ''
+  icon_type: image
+  mode: workflow
+  name: Buffer
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/openai:1.0.7@f36c3761167b3af0bfb4975b728fe3cd126342d076e1ec5359e6d4f92557d3d4
+    version: null
+kind: app
+version: 0.7.0
+workflow:
+  conversation_variables: []
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: ''
+    retriever_resource:
+      enabled: false
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: false
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInIteration: true
+        isInLoop: false
+        iteration_id: discover
+        sourceType: iteration-start
+        targetType: tool
+      id: discover_start-source-channels
+      source: discover_start
+      sourceHandle: source
+      target: channels
+      targetHandle: target
+      type: custom
+      zIndex: 1001
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: start
+        targetType: if-else
+      id: start-source-content_route
+      source: start
+      sourceHandle: source
+      target: content_route
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: variable-aggregator
+      id: content_route-true-merge
+      source: content_route
+      sourceHandle: 'true'
+      target: merge
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: if-else
+        targetType: llm
+      id: content_route-false-write
+      source: content_route
+      sourceHandle: 'false'
+      target: write
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: variable-aggregator
+      id: write-source-merge
+      source: write
+      sourceHandle: source
+      target: merge
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: variable-aggregator
+        targetType: tool
+      id: merge-source-organizations
+      source: merge
+      sourceHandle: source
+      target: organizations
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: tool
+        targetType: code
+      id: organizations-source-workspace_ids
+      source: organizations
+      sourceHandle: source
+      target: workspace_ids
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: iteration
+      id: workspace_ids-source-discover
+      source: workspace_ids
+      sourceHandle: source
+      target: discover
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: iteration
+        targetType: code
+      id: discover-source-accounts
+      source: discover
+      sourceHandle: source
+      target: accounts
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: human-input
+      id: accounts-source-review
+      source: accounts
+      sourceHandle: source
+      target: review
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: human-input
+        targetType: code
+      id: review-confirm_send-approved
+      source: review
+      sourceHandle: confirm_send
+      target: approved
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: human-input
+        targetType: end
+      id: review-cancel-cancelled
+      source: review
+      sourceHandle: cancel
+      target: cancelled
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: human-input
+        targetType: end
+      id: review-__timeout-expired
+      source: review
+      sourceHandle: __timeout
+      target: expired
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: tool
+      id: approved-source-draft
+      source: approved
+      sourceHandle: source
+      target: draft
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: tool
+        targetType: end
+      id: draft-source-saved
+      source: draft
+      sourceHandle: source
+      target: saved
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        desc: Prepare original content or ask OpenAI to create one content asset. Set an AI character target, add
+          an optional image, and choose delivery during review.
+        selected: false
+        title: 01 Prepare Your Content
+        type: start
+        variables:
+        - default: Dify
+          label: Product name
+          max_length: 500
+          options: []
+          required: true
+          type: text-input
+          variable: product_name
+        - default: AI Assistant
+          label: Content source
+          options:
+          - Original Content
+          - AI Assistant
+          required: true
+          type: select
+          variable: content_mode
+        - default: Dify helps teams build AI applications with visual workflows. This demo creates one content asset,
+            lets the user review and edit it, then choose a connected Buffer account and delivery method. This is
+            a workflow demonstration, not a newly announced release. Do not invent features, version numbers, dates,
+            metrics, prices, or URLs.
+          label: Original content / Material brief
+          max_length: 12000
+          options: []
+          required: true
+          type: paragraph
+          variable: source_material
+        - default: English
+          label: Output language (AI Assistant only)
+          max_length: 500
+          options:
+          - English
+          - Chinese
+          - Japanese
+          required: true
+          type: select
+          variable: language
+        - default: Product Update
+          label: Purpose (AI Assistant only)
+          options:
+          - Product Launch
+          - Product Update
+          - Feature Spotlight
+          - Tutorial / How-to
+          - Community Announcement
+          - Event Promotion
+          - Blog / Resource Sharing
+          - Customer Story
+          - Feedback Request
+          - General Update
+          required: true
+          type: select
+          variable: purpose
+        - default: ''
+          hint: Leave blank for no limit. Applies to AI generation only.
+          label: Maximum characters
+          required: false
+          type: number
+          variable: max_characters
+        - default: ''
+          label: CTA URL (AI Assistant only, optional)
+          max_length: 500
+          options: []
+          required: false
+          type: text-input
+          variable: cta_url
+        - allowed_file_extensions:
+          - .JPG
+          - .JPEG
+          - .PNG
+          - .WEBP
+          allowed_file_types:
+          - image
+          allowed_file_upload_methods:
+          - local_file
+          - remote_url
+          label: Post image (optional, up to 10 MB)
+          number_limits: 1
+          options: []
+          required: false
+          type: file-list
+          variable: images
+      height: 409
+      id: start
+      position:
+        x: -23.64314177132769
+        y: 94.85922458595587
+      positionAbsolute:
+        x: -23.64314177132769
+        y: 94.85922458595587
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: is
+            id: dac21d5d-249f-43e1-8208-8f037811df00
+            value: Original Content
+            varType: string
+            variable_selector:
+            - start
+            - content_mode
+          id: 'true'
+          logical_operator: and
+        desc: Original Content preserves the supplied wording. AI Assistant generates content once using Purpose
+          and the chosen character target.
+        selected: false
+        title: 02 Original Content or AI Assistant?
+        type: if-else
+      height: 240
+      id: content_route
+      position:
+        x: 342
+        y: 151.33333333333334
+      positionAbsolute:
+        x: 342
+        y: 151.33333333333334
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        desc: Generate one reusable content asset. Purpose controls the voice; the user controls the AI character
+          target. No platform is chosen yet.
+        model:
+          completion_params:
+            reasoning_effort: low
+          mode: chat
+          name: gpt-5.6-sol
+          provider: langgenius/openai/openai
+        prompt_template:
+        - id: material-system
+          role: system
+          text: 'You write ONE ready-to-review content asset. Use only supplied facts. Never invent features, versions,
+            release claims, dates, metrics, prices, quotes, or URLs. Do not choose a social platform or create platform
+            variants. Return only the content text, without JSON, headings, alternatives, explanations, or Markdown
+            fences. Do not imply that a workflow demonstration is a new product release. An optional image will
+            be attached separately and has not been analyzed.
+
+            Automatically match the voice to Purpose:
+
+            Product Launch: confident, benefit-led, specific.
+
+            Product Update: clear and practical; explain the change and who benefits.
+
+            Feature Spotlight: focused and concrete; connect a feature to a useful outcome.
+
+            Tutorial / How-to: helpful, precise, action-oriented.
+
+            Community Announcement: welcoming and inclusive.
+
+            Event Promotion: inviting, informative, and factual.
+
+            Blog / Resource Sharing: useful, curious, and concise.
+
+            Customer Story: credible, human, and evidence-led.
+
+            Feedback Request: open, respectful, and curious.
+
+            General Update: friendly, clear, and direct.
+
+            Maximum characters is an optional AI drafting preference. If it is 0, blank, or omitted, there is no
+            preset character limit; write a coherent, concise content asset. If it is a positive number, stay below
+            that character target, including spaces, URLs, and hashtags. Do not interpret 0 as zero output. This
+            preference is not a platform capability. Keep a supplied CTA URL unchanged if used.'
+        - id: material-user
+          role: user
+          text: 'Product: {{#start.product_name#}}
+
+            Purpose: {{#start.purpose#}}
+
+            Language: {{#start.language#}}
+
+            Maximum characters (blank = no limit): {{#start.max_characters#}}
+
+            Optional CTA URL: {{#start.cta_url#}}
+
+
+            Source material:
+
+            {{#start.source_material#}}'
+        reasoning_format: separated
+        retry_config:
+          max_retries: 1
+          retry_enabled: true
+          retry_interval: 1000
+        selected: false
+        structured_output_enabled: false
+        title: 03 OpenAI · Produce Content
+        type: llm
+        vision:
+          enabled: false
+      height: 193
+      id: write
+      position:
+        x: 704
+        y: 274.18333333333334
+      positionAbsolute:
+        x: 704
+        y: 274.18333333333334
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        advanced_settings:
+          group_enabled: false
+          groups: []
+        desc: Use the OpenAI draft or preserve the original input exactly.
+        output_type: string
+        selected: false
+        title: 04 Select Content
+        type: variable-aggregator
+        variables:
+        - - write
+          - text
+        - - start
+          - source_material
+      height: 179
+      id: merge
+      position:
+        x: 1066
+        y: 146.13333333333333
+      positionAbsolute:
+        x: 1066
+        y: 146.13333333333333
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: Read available workspaces with the existing Buffer authorization. No workspace ID is requested from
+          the user.
+        is_team_authorization: true
+        output_schema:
+          properties:
+            count:
+              type: integer
+            organizations:
+              items:
+                properties:
+                  channelCount:
+                    type: integer
+                  id:
+                    type: string
+                  name:
+                    type: string
+                type: object
+              type: array
+          type: object
+        params: {}
+        provider_id: TenTen/buffer/buffer
+        provider_name: buffer
+        provider_type: builtin
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 1000
+        selected: false
+        title: 05 Buffer · Discover Workspaces
+        tool_configurations: {}
+        tool_description: Read workspaces available to the authorized Buffer account.
+        tool_label: List Organizations
+        tool_name: list_organizations
+        tool_node_version: '2'
+        tool_parameters: {}
+        type: tool
+      height: 128
+      id: organizations
+      position:
+        x: 1408
+        y: 212.13333333333333
+      positionAbsolute:
+        x: 1408
+        y: 212.13333333333333
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        code: "def main(result: list) -> dict:\n    organizations = []\n    for item in result:\n        if isinstance(item,\
+          \ dict):\n            organizations.extend(item.get(\"organizations\", []))\n    names = {str(o[\"id\"\
+          ]): str(o.get(\"name\") or \"Workspace\") for o in organizations if isinstance(o, dict) and o.get(\"id\"\
+          )}\n    if not names:\n        raise ValueError(\"No Buffer workspaces are available. Check the Buffer\
+          \ connection.\")\n    return {\"organization_ids\": list(names), \"organization_names\": names}\n"
+        code_language: python3
+        desc: Resolve workspace IDs internally so users only see readable account names.
+        outputs:
+          organization_ids:
+            children: null
+            type: array[string]
+          organization_names:
+            children: null
+            type: object
+        selected: false
+        title: 06 Prepare Workspace Lookup
+        type: code
+        variables:
+        - value_selector:
+          - organizations
+          - json
+          value_type: array[object]
+          variable: result
+      height: 112
+      id: workspace_ids
+      position:
+        x: 1750
+        y: 241.4666666666667
+      positionAbsolute:
+        x: 1750
+        y: 241.4666666666667
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: Read channels from every authorized workspace. This lookup does not create or publish posts.
+        error_handle_mode: terminated
+        flatten_output: true
+        height: 250
+        is_parallel: false
+        iterator_input_type: array[string]
+        iterator_selector:
+        - workspace_ids
+        - organization_ids
+        output_selector:
+        - channels
+        - json
+        output_type: array[object]
+        parallel_nums: 1
+        selected: false
+        start_node_id: discover_start
+        title: 07 Buffer · Discover Connected Accounts
+        type: iteration
+        width: 470
+      height: 250
+      id: discover
+      position:
+        x: 2092
+        y: 191.13333333333333
+      positionAbsolute:
+        x: 2092
+        y: 191.13333333333333
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 470
+      zIndex: 0
+    - data:
+        desc: ''
+        isInIteration: true
+        selected: false
+        title: ''
+        type: iteration-start
+      draggable: false
+      height: 48
+      id: discover_start
+      parentId: discover
+      position:
+        x: 60
+        y: 76
+      positionAbsolute:
+        x: 2152
+        y: 267.1333333333333
+      selectable: false
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1001
+    - data:
+        desc: Read channels for the current workspace.
+        isInIteration: true
+        isInLoop: false
+        is_team_authorization: true
+        iteration_id: discover
+        output_schema:
+          properties:
+            channels:
+              items:
+                type: object
+              type: array
+            count:
+              type: integer
+          type: object
+        params: {}
+        provider_id: TenTen/buffer/buffer
+        provider_name: buffer
+        provider_type: builtin
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 1000
+        selected: false
+        title: List Channels
+        tool_configurations: {}
+        tool_description: List connected social channels in a Buffer organization, including service, timezone,
+          and connection/queue status. Use returned IDs instead of guessing.
+        tool_label: List Channels
+        tool_name: list_channels
+        tool_node_version: '2'
+        tool_parameters:
+          organization_id:
+            type: variable
+            value:
+            - discover
+            - item
+        type: tool
+      height: 96
+      id: channels
+      parentId: discover
+      position:
+        x: 184
+        y: 60
+      positionAbsolute:
+        x: 2276
+        y: 251.13333333333333
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 1001
+    - data:
+        code: "def main(results: list, organization_names: dict) -> dict:\n    platform_names = {\"twitter\": \"\
+          X\", \"x\": \"X\", \"bluesky\": \"Bluesky\", \"linkedin\": \"LinkedIn\", \"instagram\": \"Instagram\"\
+          , \"facebook\": \"Facebook\", \"threads\": \"Threads\", \"tiktok\": \"TikTok\", \"youtube\": \"YouTube\"\
+          , \"pinterest\": \"Pinterest\", \"mastodon\": \"Mastodon\", \"googlebusiness\": \"Google Business Profile\"\
+          , \"googlebusinessprofile\": \"Google Business Profile\"}\n    supported = {\"X\", \"Bluesky\", \"LinkedIn\"\
+          }\n    channels = []\n    def collect(value):\n        if isinstance(value, list):\n            for item\
+          \ in value:\n                collect(item)\n        elif isinstance(value, dict) and isinstance(value.get(\"\
+          channels\"), list):\n            channels.extend(value[\"channels\"])\n    collect(results)\n    account_map\
+          \ = {}\n    connected_labels = []\n    unavailable_labels = []\n    seen_ids = set()\n    for c in channels:\n\
+          \        if not isinstance(c, dict) or c.get(\"isDisconnected\") or c.get(\"isLocked\") or not c.get(\"\
+          id\"):\n            continue\n        organization_id = str(c.get(\"organizationId\", \"\"))\n       \
+          \ if organization_id not in organization_names or str(c[\"id\"]) in seen_ids:\n            continue\n\
+          \        seen_ids.add(str(c[\"id\"]))\n        service = str(c.get(\"service\", \"\")).lower()\n     \
+          \   platform = platform_names.get(service, str(c.get(\"service\") or \"Social account\"))\n        name\
+          \ = str(c.get(\"displayName\") or c.get(\"name\") or \"Connected account\")\n        handle = str(c.get(\"\
+          name\") or \"\")\n        if handle and handle != name:\n            name += \" (\" + handle + \")\"\n\
+          \        label = platform + \" · \" + name + \" · \" + organization_names[organization_id]\n        base\
+          \ = label\n        suffix = 2\n        while label in connected_labels:\n            label = base + \"\
+          \ · Account \" + str(suffix)\n            suffix += 1\n        connected_labels.append(label)\n      \
+          \  if platform in supported:\n            account_map[label] = {\"id\": str(c[\"id\"]), \"platform\":\
+          \ platform, \"service\": service, \"organization_id\": organization_id, \"timezone\": str(c.get(\"timezone\"\
+          ) or \"UTC\")}\n        else:\n            unavailable_labels.append(label)\n    report = \"\\n\".join(\"\
+          - \" + label + (\" (time zone: \" + account_map[label][\"timezone\"] + \")\" if label in account_map else\
+          \ \"\") for label in connected_labels) or \"No connected accounts are available under the configured Buffer\
+          \ authorization.\"\n    if unavailable_labels:\n        report += \"\\n\\nThis template currently delivers\
+          \ to X, Bluesky, and LinkedIn. Other connected platforms are listed above for visibility.\"\n    report\
+          \ += \"\\n\\nChoose an account below. Buffer validates the actual network and account limits, including\
+          \ URL and Unicode counting rules.\"\n    options = list(account_map) or [\"No supported connected account\
+          \ — cancel and check the Buffer connection\"]\n    message = \"Choose a destination and delivery method.\
+          \ Only Schedule needs a publish time. Account choices come from the Buffer authorization configured for\
+          \ this workflow.\" if account_map else \"No supported account is available. Cancel and connect an X, Bluesky,\
+          \ or LinkedIn account in Buffer.\"\n    return {\"account_options\": options, \"account_map\": account_map,\
+          \ \"account_message\": message, \"connected_accounts_report\": report}\n"
+        code_language: python3
+        desc: List all connected accounts and build destination choices by platform and account name. No platform
+          is chosen at the start.
+        outputs:
+          account_map:
+            children: null
+            type: object
+          account_message:
+            children: null
+            type: string
+          account_options:
+            children: null
+            type: array[string]
+          connected_accounts_report:
+            children: null
+            type: string
+        selected: false
+        title: 08 Build Account Choices
+        type: code
+        variables:
+        - value_selector:
+          - discover
+          - output
+          value_type: array[object]
+          variable: results
+        - value_selector:
+          - workspace_ids
+          - organization_names
+          value_type: object
+          variable: organization_names
+      height: 128
+      id: accounts
+      position:
+        x: 2678
+        y: 293.80000000000007
+      positionAbsolute:
+        x: 2678
+        y: 293.80000000000007
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        delivery_methods:
+        - enabled: true
+          id: e877bd0f-0781-4150-9adb-4527cdc72178
+          type: webapp
+        desc: Edit the content, choose a connected account and delivery method, then confirm once. Publish Now,
+          Save Draft, and Add to Queue do not require a time.
+        form_content: '# Review Your Content & Delivery
+
+
+          Content source: {{#start.content_mode#}}
+
+
+          Maximum characters guides AI generation only. Leave blank for no limit. Original Content preserves your
+          wording. Your final edits are sent as entered; Buffer validates the destination account''s actual limits.
+
+
+          ## Content — edit before sending
+
+          {{#$output.post_text#}}
+
+
+          ## Optional image
+
+          {{#start.images#}}
+
+
+          ## Connected social accounts
+
+          {{#accounts.connected_accounts_report#}}
+
+
+          ## Destination account
+
+          {{#accounts.account_message#}}
+
+          {{#$output.account#}}
+
+
+          ## Delivery method
+
+          {{#$output.delivery_method#}}
+
+
+          ## Scheduled publish time (Schedule only)
+
+          Enter `YYYY-MM-DD HH:mm` in the account''s time zone. Leave blank for other methods.
+
+          {{#$output.schedule_at#}}
+
+
+          **Confirm & Send to Buffer** submits the exact text, image, account, and method selected above. **Publish
+          Now** publishes immediately; **Schedule** uses your future time; **Add to Queue** uses Buffer''s queue;
+          **Save Draft** keeps the post unpublished.'
+        inputs:
+        - default:
+            selector:
+            - merge
+            - output
+            type: variable
+            value: ''
+          output_variable_name: post_text
+          type: paragraph
+        - option_source:
+            selector:
+            - accounts
+            - account_options
+            type: variable
+            value: []
+          output_variable_name: account
+          type: select
+        - option_source:
+            selector: []
+            type: constant
+            value:
+            - Save Draft
+            - Add to Queue
+            - Schedule
+            - Publish Now
+          output_variable_name: delivery_method
+          type: select
+        - default:
+            selector: []
+            type: constant
+            value: ''
+          output_variable_name: schedule_at
+          type: paragraph
+        selected: false
+        timeout: 3
+        timeout_unit: day
+        title: 09 Human Input · Review & Choose Delivery
+        type: human-input
+        user_actions:
+        - button_style: primary
+          id: confirm_send
+          title: Confirm & Send to Buffer
+        - button_style: default
+          id: cancel
+          title: Cancel
+      height: 282
+      id: review
+      position:
+        x: 3020
+        y: 246.13333333333338
+      positionAbsolute:
+        x: 3020
+        y: 246.13333333333338
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        code: "import json\nfrom urllib.parse import urlsplit\nfrom datetime import datetime, timezone\nfrom zoneinfo\
+          \ import ZoneInfo, ZoneInfoNotFoundError\n\ndef resolve_delivery(account: str, material: str, delivery_method:\
+          \ str, schedule_at: str, account_map: dict, content_mode: str) -> dict:\n    target = account_map.get(account)\n\
+          \    supported = {\"X\", \"Bluesky\", \"LinkedIn\"}\n    if not isinstance(target, dict) or target.get(\"\
+          platform\") not in supported or not target.get(\"id\"):\n        raise ValueError(\"Choose a supported\
+          \ connected social account.\")\n    if not isinstance(material, str) or not material.strip():\n      \
+          \  raise ValueError(\"Enter the content material or original post.\")\n    modes = {\"Save Draft\": \"\
+          draft\", \"Add to Queue\": \"addToQueue\", \"Schedule\": \"customScheduled\", \"Publish Now\": \"shareNow\"\
+          }\n    if delivery_method not in modes:\n        raise ValueError(\"Choose a delivery method.\")\n   \
+          \ if content_mode not in {\"Original Content\", \"AI Assistant\"}:\n        raise ValueError(\"Choose\
+          \ Original Content or AI Assistant.\")\n    zone_name = str(target.get(\"timezone\") or \"UTC\")\n   \
+          \ due_at = \"\"\n    when = {\"Save Draft\": \"Saved as an unpublished draft\", \"Add to Queue\": \"Next\
+          \ available Buffer queue slot\", \"Publish Now\": \"Immediately after your final confirmation\", \"Schedule\"\
+          : \"\"}[delivery_method]\n    if delivery_method == \"Schedule\":\n        if not isinstance(schedule_at,\
+          \ str) or not schedule_at.strip():\n            raise ValueError(\"Schedule requires a future publish\
+          \ date and time.\")\n        try:\n            scheduled = datetime.fromisoformat(schedule_at.strip().replace(\"\
+          Z\", \"+00:00\"))\n        except ValueError as exc:\n            raise ValueError(\"Use YYYY-MM-DD HH:mm\
+          \ or an ISO timestamp with a UTC offset.\") from exc\n        if scheduled.tzinfo is None:\n         \
+          \   try:\n                zone = ZoneInfo(zone_name)\n            except ZoneInfoNotFoundError as exc:\n\
+          \                raise ValueError(\"The account time zone is unavailable. Enter an ISO timestamp with\
+          \ an explicit UTC offset.\") from exc\n            valid = []\n            for fold in (0, 1):\n     \
+          \           candidate = scheduled.replace(tzinfo=zone, fold=fold)\n                if candidate.astimezone(timezone.utc).astimezone(zone).replace(tzinfo=None)\
+          \ == scheduled:\n                    valid.append(candidate)\n            if not valid:\n            \
+          \    raise ValueError(\"That local time does not exist because of daylight saving. Choose another time.\"\
+          )\n            if len(valid) == 2 and valid[0].utcoffset() != valid[1].utcoffset():\n                raise\
+          \ ValueError(\"That local time is ambiguous because of daylight saving. Include an explicit UTC offset.\"\
+          )\n            scheduled = valid[0]\n        scheduled = scheduled.astimezone(timezone.utc)\n        if\
+          \ scheduled <= datetime.now(timezone.utc):\n            raise ValueError(\"The scheduled publish time\
+          \ must be in the future.\")\n        due_at = scheduled.isoformat(timespec=\"milliseconds\").replace(\"\
+          +00:00\", \"Z\")\n        when = \"Scheduled for \" + schedule_at.strip() + \" (account time zone: \"\
+          \ + zone_name + \"; UTC: \" + due_at + \")\"\n    platform = target[\"platform\"]\n    delivery = {\"\
+          channel_id\": target[\"id\"], \"channel_name\": account, \"platform\": platform, \"mode\": modes[delivery_method],\
+          \ \"due_at\": due_at, \"timezone\": zone_name, \"ai_assisted\": content_mode == \"AI Assistant\"}\n  \
+          \  summary = \"Platform: \" + platform + \"\\n\\nAccount: \" + account + \"\\n\\nDelivery: \" + delivery_method\
+          \ + \"\\n\\nTiming: \" + when\n    return {\"delivery\": delivery, \"delivery_summary\": summary, \"material\"\
+          : material, \"platform\": platform}\n\ndef main(account: str, post_text: str, delivery_method: str, schedule_at:\
+          \ str, account_map: dict, content_mode: str, images: list = None) -> dict:\n    result = resolve_delivery(account,\
+          \ post_text, delivery_method, schedule_at, account_map, content_mode)\n    delivery = result[\"delivery\"\
+          ]\n    platform = delivery[\"platform\"]\n    mode = delivery[\"mode\"]\n    due_at = delivery[\"due_at\"\
+          ]\n    files = images or []\n    if len(files) > 1:\n        raise ValueError(\"Attach at most one image\
+          \ per post.\")\n    assets = []\n    for image in files:\n        if not isinstance(image, dict) or image.get(\"\
+          type\") != \"image\":\n            raise ValueError(\"The attachment must be an image.\")\n        url\
+          \ = image.get(\"url\") or image.get(\"remote_url\")\n        if not isinstance(url, str):\n          \
+          \  raise ValueError(\"The uploaded image has no download URL.\")\n        parsed = urlsplit(url)\n   \
+          \     if parsed.scheme != \"https\" or not parsed.hostname or parsed.username or parsed.password:\n  \
+          \          raise ValueError(\"The image requires an accessible HTTPS download URL.\")\n        assets.append({\"\
+          image\": {\"url\": url}})\n    return {\"channel_id\": delivery[\"channel_id\"], \"channel_name\": delivery[\"\
+          channel_name\"], \"platform\": platform, \"approved_text\": post_text, \"assets_json\": json.dumps(assets),\
+          \ \"image_count\": len(assets), \"ai_assisted\": bool(delivery.get(\"ai_assisted\")), \"mode\": mode,\
+          \ \"due_at\": due_at}\n"
+        code_language: python3
+        desc: Validate the account, image, and future scheduled time. Publish Now ignores schedule_at. The chosen
+          AI limit never blocks the final human-edited text.
+        outputs:
+          ai_assisted:
+            children: null
+            type: boolean
+          approved_text:
+            children: null
+            type: string
+          assets_json:
+            children: null
+            type: string
+          channel_id:
+            children: null
+            type: string
+          channel_name:
+            children: null
+            type: string
+          due_at:
+            children: null
+            type: string
+          image_count:
+            children: null
+            type: number
+          mode:
+            children: null
+            type: string
+          platform:
+            children: null
+            type: string
+        selected: false
+        title: 10 Validate Confirmed Delivery
+        type: code
+        variables:
+        - value_selector:
+          - review
+          - account
+          value_type: string
+          variable: account
+        - value_selector:
+          - review
+          - post_text
+          value_type: string
+          variable: post_text
+        - value_selector:
+          - review
+          - delivery_method
+          value_type: string
+          variable: delivery_method
+        - value_selector:
+          - review
+          - schedule_at
+          value_type: string
+          variable: schedule_at
+        - value_selector:
+          - accounts
+          - account_map
+          value_type: object
+          variable: account_map
+        - value_selector:
+          - start
+          - content_mode
+          value_type: string
+          variable: content_mode
+        - value_selector:
+          - start
+          - images
+          value_type: array[file]
+          variable: images
+      height: 144
+      id: approved
+      position:
+        x: 3382
+        y: 144.51666666666668
+      positionAbsolute:
+        x: 3382
+        y: 144.51666666666668
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: Create one Buffer post with the final confirmed text, image, mode, and scheduled time. Automatic retries
+          stay disabled.
+        is_team_authorization: true
+        output_schema:
+          properties:
+            post:
+              properties:
+                channelId:
+                  type: string
+                channelService:
+                  type: string
+                createdAt:
+                  type: string
+                dueAt:
+                  type:
+                  - string
+                  - 'null'
+                error:
+                  type:
+                  - object
+                  - 'null'
+                externalLink:
+                  type:
+                  - string
+                  - 'null'
+                id:
+                  type: string
+                schedulingType:
+                  type:
+                  - string
+                  - 'null'
+                sentAt:
+                  type:
+                  - string
+                  - 'null'
+                shareMode:
+                  type: string
+                status:
+                  type: string
+                text:
+                  type: string
+                updatedAt:
+                  type: string
+              type: object
+            post_id:
+              type: string
+            status:
+              type: string
+          type: object
+        params: {}
+        provider_id: TenTen/buffer/buffer
+        provider_name: buffer
+        provider_type: builtin
+        retry_config:
+          max_retries: 0
+          retry_enabled: false
+          retry_interval: 1000
+        selected: false
+        title: 11 Buffer · Execute Confirmed Delivery
+        tool_configurations: {}
+        tool_description: Create a new Buffer post in one channel. Defaults to an unpublished draft. Explicit scheduling
+          modes can queue or immediately publish it. Use once per channel; do not blindly retry after a timeout.
+        tool_label: Create Post
+        tool_name: create_post
+        tool_node_version: '2'
+        tool_parameters:
+          ai_assisted:
+            type: variable
+            value:
+            - approved
+            - ai_assisted
+          assets_json:
+            type: variable
+            value:
+            - approved
+            - assets_json
+          channel_id:
+            type: variable
+            value:
+            - approved
+            - channel_id
+          due_at:
+            type: variable
+            value:
+            - approved
+            - due_at
+          mode:
+            type: variable
+            value:
+            - approved
+            - mode
+          text:
+            type: variable
+            value:
+            - approved
+            - approved_text
+        type: tool
+      height: 128
+      id: draft
+      position:
+        x: 3724
+        y: 165.85000000000002
+      positionAbsolute:
+        x: 3724
+        y: 165.85000000000002
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: Return the Buffer result, selected platform, account, delivery mode, and scheduled timestamp.
+        outputs:
+        - value_selector:
+          - approved
+          - approved_text
+          value_type: string
+          variable: approved_copy
+        - value_selector:
+          - approved
+          - channel_name
+          value_type: string
+          variable: buffer_account
+        - value_selector:
+          - approved
+          - image_count
+          value_type: number
+          variable: attached_images
+        - value_selector:
+          - draft
+          - json
+          value_type: array[object]
+          variable: buffer_result
+        - value_selector:
+          - approved
+          - platform
+          value_type: string
+          variable: selected_platform
+        - value_selector:
+          - approved
+          - mode
+          value_type: string
+          variable: delivery_mode
+        - value_selector:
+          - approved
+          - due_at
+          value_type: string
+          variable: scheduled_publish_time
+        selected: false
+        title: Buffer Delivery Request Completed
+        type: end
+      height: 304
+      id: saved
+      position:
+        x: 4066
+        y: 138.18333333333337
+      positionAbsolute:
+        x: 4066
+        y: 138.18333333333337
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: Return the selected content without creating a Buffer post.
+        outputs:
+        - value_selector:
+          - merge
+          - output
+          value_type: string
+          variable: cancelled_content
+        selected: false
+        title: Cancelled · Nothing Sent
+        type: end
+      height: 132
+      id: cancelled
+      position:
+        x: 3382
+        y: 352.51666666666665
+      positionAbsolute:
+        x: 3382
+        y: 352.51666666666665
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        desc: The review timed out. Nothing was written to Buffer.
+        outputs:
+        - value_selector:
+          - merge
+          - output
+          value_type: string
+          variable: expired_content
+        selected: false
+        title: Review Expired · Nothing Sent
+        type: end
+      height: 132
+      id: expired
+      position:
+        x: 3382
+        y: 564.5166666666667
+      positionAbsolute:
+        x: 3382
+        y: 564.5166666666667
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+      zIndex: 0
+    - data:
+        author: TenTen
+        desc: ''
+        height: 300
+        selected: false
+        showAuthor: false
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"USE CASE
+          · Dify Content to Buffer","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":1,"textStyle":""},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Prepare
+          one content asset, review it once, then choose the connected account and delivery method.","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Original
+          Content bypasses OpenAI. AI Assistant generates once, following Purpose, language, and your character
+          target.","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Only
+          human confirmation reaches Buffer.","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""}],"direction":null,"format":"","indent":0,"type":"root","version":1}}'
+        theme: green
+        title: ''
+        type: ''
+        width: 630
+      height: 300
+      id: note-usecase
+      position:
+        x: -3.583711308762986
+        y: -80.33793335255473
+      positionAbsolute:
+        x: -3.583711308762986
+        y: -80.33793335255473
+      selected: false
+      type: custom-note
+      width: 630
+      zIndex: 0
+    - data:
+        author: TenTen
+        desc: ''
+        height: 300
+        selected: false
+        showAuthor: false
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"01 ·
+          Produce One Content Asset","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":1,"textStyle":""},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Choose
+          Original Content or AI Assistant. Add an optional image.","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Set
+          Maximum characters for AI generation. Leave it blank for no preset drafting limit. Purpose automatically
+          controls the voice.","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Original
+          Content keeps your wording. No platform is selected at this stage and no second AI rewrite runs.","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""}],"direction":null,"format":"","indent":0,"type":"root","version":1}}'
+        theme: violet
+        title: ''
+        type: ''
+        width: 900
+      height: 300
+      id: note-ai
+      position:
+        x: 683.5156828515555
+        y: -62.3189102469676
+      positionAbsolute:
+        x: 683.5156828515555
+        y: -62.3189102469676
+      selected: false
+      type: custom-note
+      width: 900
+      zIndex: 0
+    - data:
+        author: TenTen
+        desc: ''
+        height: 300
+        selected: false
+        showAuthor: false
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"02 ·
+          Review and Choose Delivery","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":1,"textStyle":""},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Buffer
+          lists connected accounts from the authorization configured for this workflow. No IDs are entered by the
+          user.","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Edit
+          the content, select one account, and choose Save Draft, Add to Queue, Schedule, or Publish Now.","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Only
+          Schedule needs a future time. Publish Now, Save Draft, and Add to Queue ignore the time field.","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"The
+          current template supports X, Bluesky, and LinkedIn.","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""}],"direction":null,"format":"","indent":0,"type":"root","version":1}}'
+        theme: cyan
+        title: ''
+        type: ''
+        width: 950
+      height: 300
+      id: note-review
+      position:
+        x: 2060
+        y: 0
+      positionAbsolute:
+        x: 2060
+        y: 0
+      selected: false
+      type: custom-note
+      width: 950
+      zIndex: 0
+    - data:
+        author: TenTen
+        desc: ''
+        height: 300
+        selected: false
+        showAuthor: false
+        text: '{"root":{"children":[{"children":[{"detail":0,"format":1,"mode":"normal","style":"","text":"03 ·
+          Send the Confirmed Content","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":1,"textStyle":""},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Confirm
+          once to send the reviewed text and optional image to the selected account.","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"The
+          workflow validates the account, image, and scheduled time. Buffer enforces actual platform/account content
+          limits.","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"No
+          fixed 120-character X cap is applied. Human edits are never silently truncated.","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""},{"children":[{"detail":0,"format":0,"mode":"normal","style":"","text":"Cancel
+          or a three-day timeout creates no new post. Write retries are disabled.","type":"text","version":1}],"direction":null,"format":"","indent":0,"type":"paragraph","version":1,"textFormat":0,"textStyle":""}],"direction":null,"format":"","indent":0,"type":"root","version":1}}'
+        theme: yellow
+        title: ''
+        type: ''
+        width: 950
+      height: 300
+      id: note-save
+      position:
+        x: 3300
+        y: 0
+      positionAbsolute:
+        x: 3300
+        y: 0
+      selected: false
+      type: custom-note
+      width: 950
+      zIndex: 0
+    viewport:
+      x: 72.46892300419745
+      y: 228.65952798507112
+      zoom: 0.5705966473007288
+  rag_pipeline_variables: []

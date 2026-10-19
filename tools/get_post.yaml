@@ -1,0 +1,74 @@
+identity:
+  name: get_post
+  author: TenTen
+  label:
+    en_US: Get Post
+    zh_Hans: 查询单个帖子
+description:
+  human:
+    en_US: Get a Buffer post by ID, including status, publication URL, scheduled time,
+      and publishing error.
+    zh_Hans: 按 ID 查询帖子内容、发布状态、计划时间和失败原因。
+  llm: Get a Buffer post by ID, including status, publication URL, scheduled time,
+    and publishing error.
+parameters:
+- name: post_id
+  type: string
+  required: true
+  label:
+    en_US: Post ID
+    zh_Hans: 帖子 ID
+  human_description:
+    en_US: Buffer post ID returned by create_post, schedule_post, or list_posts.
+    zh_Hans: 帖子 ID
+  llm_description: Buffer post ID returned by create_post, schedule_post, or list_posts.
+  form: llm
+output_schema:
+  type: object
+  properties:
+    post:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        channelId:
+          type: string
+        channelService:
+          type: string
+        status:
+          type: string
+        dueAt:
+          type:
+          - string
+          - 'null'
+        sentAt:
+          type:
+          - string
+          - 'null'
+        shareMode:
+          type: string
+        schedulingType:
+          type:
+          - string
+          - 'null'
+        externalLink:
+          type:
+          - string
+          - 'null'
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        error:
+          type:
+          - object
+          - 'null'
+    post_id:
+      type: string
+    status:
+      type: string
+extra:
+  python:
+    source: tools/get_post.py

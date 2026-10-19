@@ -1,0 +1,459 @@
+# Buffer API contract snapshot, fetched 2026-10-16.
+
+# Source: https://developers.buffer.com/reference.md
+
+# Includes selected output fields and referenced inputs; error unions narrowed for validation.
+
+schema { query: Query mutation: Mutation }
+
+type Query { account: Account! channels(input: ChannelsInput!): [Channel!]! post(input: PostInput!): Post! posts(input: PostsInput!, first: Int, after: String): PostsResults! }
+
+type Mutation { createPost(input: CreatePostInput!): PostActionPayload! editPost(input: EditPostInput!): PostActionPayload! deletePost(input: DeletePostInput!): DeletePostPayload! }
+
+interface MutationError { message: String! }
+
+type InvalidInputError implements MutationError { message: String! }
+
+union PostActionPayload = PostActionSuccess | InvalidInputError
+
+union DeletePostPayload = DeletePostSuccess | InvalidInputError
+
+type Account {
+  id: ID!
+  organizations: [Organization!]!
+}
+
+type Organization {
+  id: OrganizationId!
+  channelCount: Int!
+  name: String!
+}
+
+type Channel {
+  id: ChannelId!
+  displayName: String
+  externalLink: String
+  isDisconnected: Boolean!
+  isLocked: Boolean!
+  isQueuePaused: Boolean!
+  name: String!
+  organizationId: OrganizationId!
+  service: Service!
+  timezone: String!
+  type: ChannelType!
+}
+
+type Post {
+  id: PostId!
+  channelId: ChannelId!
+  channelService: Service!
+  dueAt: DateTime
+  error: PostPublishingError
+  externalLink: String
+  schedulingType: SchedulingType
+  sentAt: DateTime
+  shareMode: ShareMode!
+  status: PostStatus!
+  text: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type PostPublishingError {
+  message: String!
+  supportUrl: String
+}
+
+type PostsResults {
+  edges: [PostsEdge!]
+  pageInfo: PaginationPageInfo!
+}
+
+type PostsEdge {
+  node: Post!
+}
+
+type PaginationPageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+}
+
+type PostActionSuccess {
+  post: Post!
+}
+
+type DeletePostSuccess {
+  id: PostId!
+}
+
+scalar ChannelId
+
+enum ChannelType { account business channel group page profile }
+
+input ChannelsInput {
+  filter: ChannelsFiltersInput
+  organizationId: OrganizationId!
+}
+
+input ChannelsFiltersInput {
+  isLocked: Boolean
+  product: Product
+}
+
+input CreatePostInput {
+  aiAssisted: Boolean
+  assets: [AssetInput!]! = []
+  channelId: ChannelId!
+  draftId: DraftId
+  dueAt: DateTime
+  ideaId: IdeaId
+  metadata: PostInputMetaData
+  mode: ShareMode!
+  needsApproval: Boolean! = false
+  saveToDraft: Boolean
+  schedulingType: SchedulingType!
+  source: String
+  tagIds: [TagId!]
+  text: String
+}
+
+input AssetInput {
+  document: DocumentAssetInput
+  image: ImageAssetInput
+  link: LinkAssetInput
+  video: VideoAssetInput
+}
+
+scalar DateTime
+
+input DeletePostInput {
+  id: PostId!
+}
+
+input DocumentAssetInput {
+  thumbnailUrl: String!
+  title: String!
+  url: String!
+}
+
+scalar DraftId
+
+input EditPostInput {
+  id: PostId!
+  aiAssisted: Boolean
+  approvalChange: PostApprovalChange
+  assets: [AssetInput!]
+  draftId: DraftId
+  dueAt: DateTime
+  ideaId: IdeaId
+  metadata: PostInputMetaData
+  mode: ShareMode
+  saveToDraft: Boolean
+  schedulingType: SchedulingType
+  source: String
+  tagIds: [TagId!]
+  text: String
+}
+
+scalar IdeaId
+
+input ImageAssetInput {
+  metadata: ImageMetadataInput
+  thumbnailUrl: String
+  url: String!
+}
+
+input ImageMetadataInput {
+  altText: String!
+  animatedThumbnail: String
+  dimensions: ImageDimensionsInput
+  userTags: [UserTagInput!]
+}
+
+input ImageDimensionsInput {
+  height: Int!
+  width: Int!
+}
+
+input LinkAssetInput {
+  description: String
+  thumbnailUrl: String
+  title: String
+  url: String!
+}
+
+scalar OrganizationId
+
+enum PostApprovalChange { request revert }
+
+scalar PostId
+
+input PostInput {
+  id: PostId!
+}
+
+input PostInputMetaData {
+  bluesky: BlueskyPostMetadataInput
+  facebook: FacebookPostMetadataInput
+  google: GoogleBusinessPostMetadataInput
+  instagram: InstagramPostMetadataInput
+  linkedin: LinkedInPostMetadataInput
+  mastodon: MastodonPostMetadataInput
+  pinterest: PinterestPostMetadataInput
+  substack: SubstackPostMetadataInput
+  threads: ThreadsPostMetadataInput
+  tiktok: TikTokPostMetadataInput
+  twitter: TwitterPostMetadataInput
+  youtube: YoutubePostMetadataInput
+}
+
+input BlueskyPostMetadataInput {
+  linkAttachment: LinkAttachmentInput
+  thread: [ThreadedPostInput!]
+}
+
+input FacebookPostMetadataInput {
+  annotations: [AnnotationInputFacebook!]
+  firstComment: String
+  linkAttachment: LinkAttachmentInput
+  type: PostTypeFacebook!
+}
+
+input AnnotationInputFacebook {
+  content: String!
+  indices: [Int!]!
+  text: String!
+  url: String!
+}
+
+input GoogleBusinessPostMetadataInput {
+  detailsEvent: GoogleBusinessEventMetaDataInput
+  detailsOffer: GoogleBusinessOfferMetaDataInput
+  detailsWhatsNew: GoogleBusinessWhatsNewMetaDataInput
+  title: String
+  type: PostTypeGoogleBusiness!
+}
+
+input GoogleBusinessEventMetaDataInput {
+  button: GoogleBusinessPostActionType
+  endDate: DateTime
+  isFullDayEvent: Boolean!
+  link: String
+  startDate: DateTime
+  title: String
+}
+
+input GoogleBusinessOfferMetaDataInput {
+  code: String
+  endDate: DateTime
+  link: String
+  startDate: DateTime
+  terms: String
+  title: String
+}
+
+enum GoogleBusinessPostActionType { book call learn_more none order shop signup }
+
+input GoogleBusinessWhatsNewMetaDataInput {
+  button: GoogleBusinessPostActionType
+  link: String
+}
+
+input InstagramPostMetadataInput {
+  firstComment: String
+  geolocation: InstagramGeolocationInput
+  isAiGenerated: Boolean
+  link: String
+  shouldShareToFeed: Boolean!
+  stickerFields: InstagramStickerFieldsInput
+  type: PostType!
+}
+
+input InstagramGeolocationInput {
+  id: String
+  text: String
+}
+
+input InstagramStickerFieldsInput {
+  music: String
+  other: String
+  products: String
+  text: String
+  topics: String
+}
+
+input LinkAttachmentInput {
+  description: String
+  thumbnail: LinkAttachmentThumbnailInput
+  title: String
+  url: String!
+}
+
+input LinkAttachmentThumbnailInput {
+  url: String!
+}
+
+input LinkedInPostMetadataInput {
+  annotations: [AnnotationInputLinkedIn!]
+  firstComment: String
+  linkAttachment: LinkAttachmentInput
+}
+
+input AnnotationInputLinkedIn {
+  id: String!
+  entity: String!
+  length: Int!
+  link: String!
+  localizedName: String!
+  start: Int!
+  vanityName: String!
+}
+
+input MastodonPostMetadataInput {
+  spoilerText: String
+  thread: [ThreadedPostInput!]
+}
+
+input PinterestPostMetadataInput {
+  boardServiceId: String
+  title: String
+  url: String
+}
+
+enum PostStatus { draft error needs_approval scheduled sending sent }
+
+enum PostType { carousel event ghost_post offer post reel short story thread whats_new }
+
+enum PostTypeFacebook { post reel story }
+
+enum PostTypeGoogleBusiness { event offer whats_new }
+
+input PostsInput {
+  filter: PostsFiltersInput
+  organizationId: OrganizationId!
+  sort: [PostSortInput!]
+}
+
+input PostSortInput {
+  direction: SortDirection!
+  field: PostSortableKey!
+}
+
+enum PostSortableKey { dueAt createdAt }
+
+input PostsFiltersInput {
+  channelIds: [ChannelId!]
+  dueAt: DateTimeComparator
+  dueAtPresence: DateTimePresence
+  endDate: DateTime
+  postTypes: [PostType!]
+  startDate: DateTime
+  status: [PostStatus!]
+  tagIds: [TagId!]
+  tags: TagComparator
+  createdAt: DateTimeComparator
+}
+
+input DateTimeComparator {
+  end: DateTime
+  start: DateTime
+}
+
+enum DateTimePresence { absent present }
+
+enum Product { analyze buffer comments engage publish startPage }
+
+enum SchedulingType { automatic notification }
+
+enum Service { bluesky facebook googlebusiness instagram linkedin mastodon pinterest startPage substack threads tiktok twitter whatsapp youtube }
+
+enum ShareMode { addToQueue customScheduled shareNext shareNow }
+
+enum SortDirection { asc desc }
+
+input SubstackPostMetadataInput {
+  linkAttachment: LinkAttachmentInput
+}
+
+input TagComparator {
+  in: [TagId!]!
+  isEmpty: Boolean! = false
+}
+
+scalar TagId
+
+input ThreadedPostInput {
+  assets: [AssetInput!]! = []
+  metadata: ThreadItemMetadataInput
+  text: String
+}
+
+input ThreadItemMetadataInput {
+  bluesky: ThreadItemBlueskyMetadataInput
+  threads: ThreadItemThreadsMetadataInput
+}
+
+input ThreadItemBlueskyMetadataInput {
+  linkAttachment: LinkAttachmentInput
+}
+
+input ThreadItemThreadsMetadataInput {
+  linkAttachment: LinkAttachmentInput
+}
+
+input ThreadsPostMetadataInput {
+  linkAttachment: LinkAttachmentInput
+  locationId: String
+  locationName: String
+  thread: [ThreadedPostInput!]
+  topic: String
+  type: PostType
+}
+
+input TikTokPostMetadataInput {
+  isAiGenerated: Boolean
+  title: String
+}
+
+input TwitterPostMetadataInput {
+  isAiGenerated: Boolean
+  retweet: RetweetMetadataInput
+  thread: [ThreadedPostInput!]
+}
+
+input RetweetMetadataInput {
+  id: String!
+  comment: String
+}
+
+input UserTagInput {
+  handle: String!
+  x: Float!
+  y: Float!
+}
+
+input VideoAssetInput {
+  metadata: VideoMetadataInput
+  thumbnailUrl: String
+  url: String!
+}
+
+input VideoMetadataInput {
+  thumbnailOffset: Int
+  title: String
+}
+
+input YoutubePostMetadataInput {
+  categoryId: String
+  embeddable: Boolean
+  isAiGenerated: Boolean
+  license: YoutubeLicense
+  madeForKids: Boolean
+  notifySubscribers: Boolean
+  privacy: YoutubePrivacy
+  title: String
+}
+
+enum YoutubeLicense { creativeCommon youtube }
+
+enum YoutubePrivacy { private public unlisted }

@@ -1,0 +1,233 @@
+identity:
+  name: update_post
+  author: TenTen
+  label:
+    en_US: Update Post
+    zh_Hans: 更新帖子
+description:
+  human:
+    en_US: Edit an existing Buffer draft or scheduled post. Omitted fields preserve
+      existing values. mode=keep preserves scheduling; choose a mode to schedule a
+      draft or change its schedule. Empty optional text is ignored; clear_text=true
+      explicitly clears it.
+    zh_Hans: 编辑草稿或已排期的帖子，默认保留原有排期，未提供的字段保持原值。
+  llm: Edit an existing Buffer draft or scheduled post. Omitted fields preserve existing
+    values. mode=keep preserves scheduling; choose a mode to schedule a draft or change
+    its schedule. Empty optional text is ignored; clear_text=true explicitly clears
+    it.
+parameters:
+- name: post_id
+  type: string
+  required: true
+  label:
+    en_US: Post ID
+    zh_Hans: 帖子 ID
+  human_description:
+    en_US: Buffer post ID returned by create_post, schedule_post, or list_posts.
+    zh_Hans: 帖子 ID
+  llm_description: Buffer post ID returned by create_post, schedule_post, or list_posts.
+  form: llm
+- name: text
+  type: string
+  required: false
+  label:
+    en_US: Text
+    zh_Hans: 帖子文案
+  human_description:
+    en_US: Post text. Required unless assets_json supplies media. For a thread, match
+      the first item in metadata thread.
+    zh_Hans: 帖子文案
+  llm_description: Post text. Required unless assets_json supplies media. For a thread,
+    match the first item in metadata thread.
+  form: llm
+- name: assets_json
+  type: string
+  required: false
+  label:
+    en_US: Assets (JSON)
+    zh_Hans: 媒体附件（JSON）
+  human_description:
+    en_US: JSON array of media assets, e.g. [{"image":{"url":"https://example.com/photo.jpg"}}].
+      Supports image, video, document. URLs must be publicly reachable by Buffer;
+      Dify file IDs and private URLs cannot be used. On update, [] removes all media.
+    zh_Hans: 媒体附件（JSON）
+  llm_description: JSON array of media assets, e.g. [{"image":{"url":"https://example.com/photo.jpg"}}].
+    Supports image, video, document. URLs must be publicly reachable by Buffer; Dify
+    file IDs and private URLs cannot be used. On update, [] removes all media.
+  form: llm
+- name: metadata_json
+  type: string
+  required: false
+  label:
+    en_US: Platform Metadata (JSON)
+    zh_Hans: 平台专属配置（JSON）
+  human_description:
+    en_US: Buffer PostInputMetaData JSON object for the target service, e.g. {"instagram":{"type":"post","shouldShareToFeed":true}}.
+      Required configuration varies by platform. Thread text must match its first
+      item.
+    zh_Hans: 平台专属配置（JSON）
+  llm_description: Buffer PostInputMetaData JSON object for the target service, e.g.
+    {"instagram":{"type":"post","shouldShareToFeed":true}}. Required configuration varies by platform. Thread
+    text must match its first item.
+  form: llm
+- name: tag_ids_json
+  type: string
+  required: false
+  label:
+    en_US: Tag IDs (JSON)
+    zh_Hans: 标签 ID（JSON）
+  human_description:
+    en_US: JSON array of Buffer tag IDs. On update, [] removes all tags.
+    zh_Hans: 标签 ID（JSON）
+  llm_description: JSON array of Buffer tag IDs. On update, [] removes all tags.
+  form: llm
+- name: ai_assisted
+  type: boolean
+  required: false
+  label:
+    en_US: AI Assisted
+    zh_Hans: AI 辅助生成
+  human_description:
+    en_US: Whether AI helped create or edit this content.
+    zh_Hans: AI 辅助生成
+  llm_description: Whether AI helped create or edit this content.
+  form: llm
+- name: clear_text
+  type: boolean
+  required: false
+  label:
+    en_US: Clear Text
+    zh_Hans: 清空文案
+  human_description:
+    en_US: Set true to explicitly clear the caption when text is omitted. Existing
+      media may still be required by the platform.
+    zh_Hans: 清空文案
+  llm_description: Set true to explicitly clear the caption when text is omitted.
+    Existing media may still be required by the platform.
+  form: llm
+  default: false
+- name: mode
+  type: select
+  required: false
+  label:
+    en_US: Scheduling Mode
+    zh_Hans: 排期模式
+  human_description:
+    en_US: draft saves without publishing; addToQueue uses the next queue slot; customScheduled
+      requires due_at; shareNext adds to the front of the queue; shareNow publishes
+      immediately; keep preserves existing scheduling.
+    zh_Hans: 排期模式
+  llm_description: draft saves without publishing; addToQueue uses the next queue
+    slot; customScheduled requires due_at; shareNext adds to the front of the queue;
+    shareNow publishes immediately; keep preserves existing scheduling.
+  form: llm
+  default: keep
+  options:
+  - value: keep
+    label:
+      en_US: Keep Current Schedule
+      zh_Hans: 保留现有排期
+  - value: draft
+    label:
+      en_US: Save Draft
+      zh_Hans: 保存草稿
+  - value: addToQueue
+    label:
+      en_US: Add to Queue
+      zh_Hans: 加入队列
+  - value: customScheduled
+    label:
+      en_US: Choose Date and Time
+      zh_Hans: 指定发布时间
+  - value: shareNext
+    label:
+      en_US: Share Next
+      zh_Hans: 插入队首
+  - value: shareNow
+    label:
+      en_US: Publish Now
+      zh_Hans: 立即发布
+- name: due_at
+  type: string
+  required: false
+  label:
+    en_US: Publish At
+    zh_Hans: 发布时间
+  human_description:
+    en_US: Future ISO 8601 timestamp with timezone, e.g. 2026-11-01T18:00:00+08:00.
+      Required for customScheduled; normalized to UTC.
+    zh_Hans: 发布时间
+  llm_description: Future ISO 8601 timestamp with timezone, e.g. 2026-11-01T18:00:00+08:00.
+    Required for customScheduled; normalized to UTC.
+  form: llm
+- name: scheduling_type
+  type: select
+  required: false
+  label:
+    en_US: Publishing Method
+    zh_Hans: 发布方式
+  human_description:
+    en_US: automatic publishes through Buffer; notification sends a reminder requiring
+      manual publishing.
+    zh_Hans: 发布方式
+  llm_description: automatic publishes through Buffer; notification sends a reminder
+    requiring manual publishing.
+  form: llm
+  options:
+  - value: automatic
+    label:
+      en_US: Automatic
+      zh_Hans: 自动发布
+  - value: notification
+    label:
+      en_US: Reminder
+      zh_Hans: 提醒手动发布
+output_schema:
+  type: object
+  properties:
+    post:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        channelId:
+          type: string
+        channelService:
+          type: string
+        status:
+          type: string
+        dueAt:
+          type:
+          - string
+          - 'null'
+        sentAt:
+          type:
+          - string
+          - 'null'
+        shareMode:
+          type: string
+        schedulingType:
+          type:
+          - string
+          - 'null'
+        externalLink:
+          type:
+          - string
+          - 'null'
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        error:
+          type:
+          - object
+          - 'null'
+    post_id:
+      type: string
+    status:
+      type: string
+extra:
+  python:
+    source: tools/update_post.py

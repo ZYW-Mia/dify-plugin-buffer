@@ -1,0 +1,17 @@
+.venv/
+.env
+.env.*
+.git/
+.github/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+tests/
+scripts/
+examples/
+dist/
+*.difypkg
+requirements-dev.txt
+pyproject.toml
+.DS_Store

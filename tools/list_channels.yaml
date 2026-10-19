@@ -1,0 +1,37 @@
+identity:
+  name: list_channels
+  author: TenTen
+  label:
+    en_US: List Channels
+    zh_Hans: 查询社交账号
+description:
+  human:
+    en_US: List connected social channels in a Buffer organization, including service,
+      timezone, and connection/queue status. Use returned IDs instead of guessing.
+    zh_Hans: 查询组织的社交账号、平台、时区、连接和队列状态。
+  llm: List connected social channels in a Buffer organization, including service,
+    timezone, and connection/queue status. Use returned IDs instead of guessing.
+parameters:
+- name: organization_id
+  type: string
+  required: true
+  label:
+    en_US: Organization ID
+    zh_Hans: 组织 ID
+  human_description:
+    en_US: Buffer organization ID from list_organizations.
+    zh_Hans: 组织 ID
+  llm_description: Buffer organization ID from list_organizations.
+  form: llm
+output_schema:
+  type: object
+  properties:
+    channels:
+      type: array
+      items:
+        type: object
+    count:
+      type: integer
+extra:
+  python:
+    source: tools/list_channels.py

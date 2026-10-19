@@ -1,0 +1,37 @@
+identity:
+  name: delete_post
+  author: TenTen
+  label:
+    en_US: Delete Post
+    zh_Hans: 删除帖子
+description:
+  human:
+    en_US: Delete a Buffer post by ID, removing its draft or cancelling its queued
+      publication. Deletion is permanent. This does not promise removal of a post
+      already published on the social network.
+    zh_Hans: 永久删除 Buffer 草稿或取消排期；不保证删除社交平台上已发布的内容。
+  llm: Delete a Buffer post by ID, removing its draft or cancelling its queued publication.
+    Deletion is permanent. This does not promise removal of a post already published
+    on the social network.
+parameters:
+- name: post_id
+  type: string
+  required: true
+  label:
+    en_US: Post ID
+    zh_Hans: 帖子 ID
+  human_description:
+    en_US: Buffer post ID returned by create_post, schedule_post, or list_posts.
+    zh_Hans: 帖子 ID
+  llm_description: Buffer post ID returned by create_post, schedule_post, or list_posts.
+  form: llm
+output_schema:
+  type: object
+  properties:
+    post_id:
+      type: string
+    deleted:
+      type: boolean
+extra:
+  python:
+    source: tools/delete_post.py

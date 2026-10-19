@@ -1,0 +1,33 @@
+identity:
+  name: list_organizations
+  author: TenTen
+  label:
+    en_US: List Organizations
+    zh_Hans: 查询组织
+description:
+  human:
+    en_US: List Buffer organizations available to the connected account. Start here
+      to obtain organization_id.
+    zh_Hans: 查询当前 Buffer 账号可访问的组织，获取组织 ID。
+  llm: List Buffer organizations available to the connected account. Start here to
+    obtain organization_id.
+parameters: []
+output_schema:
+  type: object
+  properties:
+    organizations:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          channelCount:
+            type: integer
+    count:
+      type: integer
+extra:
+  python:
+    source: tools/list_organizations.py
