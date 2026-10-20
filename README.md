@@ -33,7 +33,9 @@ Requires Python 3.12 for development and Dify 1.9.0 or newer.
 2. Configure either OAuth or a personal API key in the Buffer tool provider.
 3. Run `list_organizations`, then `list_channels`, to obtain IDs for your workflow.
 
-This package uses the `TenTen/buffer` author namespace. When replacing an older
+This package uses the `tenten/buffer` author namespace, maintained by **TenTen**.
+Dify requires lowercase internal identifiers; the earlier `TenTen/buffer` package
+could not be published to Marketplace. When replacing an older
 author namespace, install this package and reconnect Buffer before importing its
 matching workflow template. Dify treats different author namespaces as separate plugins.
 
@@ -131,7 +133,7 @@ uv pip install --python .venv/bin/python -r requirements-dev.txt
 .venv/bin/python -m scripts.package
 ```
 
-The local packaging script validates with the real Dify SDK and creates an unsigned ZIP in Dify's `.difypkg` format using a source allowlist. It excludes environments, secrets, caches, tests, and build scripts. The official CLI can also build it with `dify plugin package . -o dist/buffer-0.1.0.difypkg`.
+The local packaging script checks the daemon's lowercase author/name rules, validates with the real Dify SDK, and creates an unsigned ZIP in Dify's `.difypkg` format using a source allowlist. It excludes environments, secrets, caches, tests, and build scripts. The official CLI can also build it with `dify plugin package . -o dist/buffer-0.1.0.difypkg`.
 
 For Dify remote debugging, copy `.env.example` to `.env`, fill in the host/port/debug key shown by Dify, and run `.venv/bin/python -m main`. OAuth client credentials belong in Dify's provider settings, not in source files.
 
@@ -141,7 +143,7 @@ For a read-only real API check, set `BUFFER_API_KEY` in your environment and run
 
 The SDK loads all eight tools. Automated tests cover HTTP/GraphQL errors, safe draft defaults, edit preservation, pagination, timezone normalization, PKCE exchange, expiring/tampered state, token rotation, and a simulated tool lifecycle. Operations and generated inputs are checked against a focused snapshot of Buffer's official API contract retrieved on October 16, 2026.
 
-Workflow previews have read real Buffer organizations and connected accounts in Dify Cloud. The current **TenTen 0.1.0** package still needs a fresh installation, OAuth reconnection, and end-to-end write verification under its new author namespace. See the remaining checks in the [manual integration checklist](docs/integration-checklist.md).
+On October 20, 2026, the maintainer confirmed real Dify installation, Buffer OAuth authorization, and real posting verification, and confirmed the Plugin Developer Agreement. The release packaging fix normalizes the internal author ID to `tenten` without changing Buffer API behavior. See the [manual integration checklist](docs/integration-checklist.md) for repeatable regression checks.
 
 ## Scope and Buffer Commit
 

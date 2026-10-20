@@ -1,6 +1,6 @@
 version: 0.1.0
 type: plugin
-author: TenTen
+author: tenten
 name: buffer
 repo: https://github.com/ZYW-Mia/dify-plugin-buffer
 contact: yawen@dify.ai

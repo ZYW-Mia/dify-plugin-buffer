@@ -1,6 +1,9 @@
 import zipfile
 from pathlib import Path
 
+import pytest
+import yaml
+
 from scripts.package import ROOT, build, package_files
 
 
@@ -24,3 +27,18 @@ def test_package_is_a_valid_root_level_zip():
             not Path(name).is_absolute() and ".." not in Path(name).parts
             for name in archive.namelist()
         )
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [("author", "TenTen"), ("author", "a" * 65), ("name", "Buffer"), ("name", "../buffer")],
+)
+def test_package_rejects_daemon_incompatible_identity_before_writing(tmp_path, field, value):
+    manifest = yaml.safe_load((ROOT / "manifest.yaml").read_text())
+    manifest[field] = value
+    (tmp_path / "manifest.yaml").write_text(yaml.safe_dump(manifest))
+
+    with pytest.raises(ValueError, match=rf"manifest.yaml {field} must use"):
+        build(tmp_path)
+
+    assert not (tmp_path / "dist").exists()

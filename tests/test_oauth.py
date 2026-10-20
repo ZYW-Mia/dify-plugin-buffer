@@ -10,7 +10,7 @@ from werkzeug import Request
 from provider.buffer import AUTH_URL, SCOPES, TOKEN_URL, BufferProvider
 
 CLIENT = {"client_id": "client-id", "client_secret": "server-side-secret"}
-REDIRECT = "https://dify.example/console/api/oauth/plugin/TenTen/buffer/buffer/tool/callback"
+REDIRECT = "https://dify.example/console/api/oauth/plugin/tenten/buffer/buffer/tool/callback"
 
 
 @pytest.fixture(autouse=True)

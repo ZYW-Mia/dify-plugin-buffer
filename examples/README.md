@@ -5,8 +5,8 @@ Buffer plugin. Configure the OpenAI model with your workspace credentials. The
 example preserves the OpenAI model selected in the existing workflow.
 If that model is unavailable, choose an OpenAI model available in your workspace.
 
-This template references the Buffer plugin published under the **TenTen** author
-namespace. Install and authorize the matching plugin before importing the template.
+This template references the `tenten/buffer` plugin maintained by **TenTen**.
+The internal author ID is lowercase because Dify requires lowercase plugin identifiers. Install and authorize the matching plugin before importing the template.
 
 1. Choose **Original Content** or **AI Assistant**. Enter the content or brief and
    optionally attach one JPG, PNG, or WebP image.

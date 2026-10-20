@@ -6,6 +6,8 @@
 
 插件名称、工具参数、帮助说明和授权字段支持英文、简体中文和日文，随 Dify 界面语言显示。工具标识和 API 枚举值保持一致。
 
+内部插件标识为 `tenten/buffer`，署名仍为 **TenTen**。Dify 要求内部标识全小写，旧的 `TenTen/buffer` 包因此无法发布到 Marketplace。迁移时请安装并授权小写标识的新包，然后导入配套模板。
+
 通过 Buffer OAuth 2.0 + PKCE 或个人 API Key，在 Dify Agent / Workflow 中查询社交账号、创建草稿、排期和管理帖子。
 
 ## 安装和授权
@@ -76,7 +78,7 @@ OAuth 客户端需要由 Dify 实例管理员配置，安装插件不会自动�
 
 ## 验证与后续联调
 
-已实现真实 GraphQL 调用、OAuth 授权码交换及 refresh token 轮换，全部工具可由 Dify SDK 加载。自动化测试覆盖参数校验、排期、分页、OAuth、错误处理及模拟完整调用流程；真实账号 OAuth、发帖和 Dify 实例安装仍需联调，见 [集成检查清单](../docs/integration-checklist.md)。
+已实现真实 GraphQL 调用、OAuth 授权码交换及 refresh token 轮换，全部工具可由 Dify SDK 加载。自动化测试覆盖参数校验、排期、分页、OAuth、错误处理及模拟完整调用流程。维护者已于 2026 年 10 月 20 日确认完成真实 Dify 安装、Buffer OAuth 授权和真实发帖验证，并确认开发者协议。本次修复仅规范内部作者标识，不改变 Buffer API 行为；重复回归步骤见 [集成检查清单](../docs/integration-checklist.md)。
 
 Buffer API 的分析数据当前仅对个人 API Key 开放，OAuth App Client 无权读取，因此首版没有提供分析工具。请求超时后先查询帖子状态再重试，避免重复发帖。
 

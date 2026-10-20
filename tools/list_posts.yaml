@@ -1,6 +1,6 @@
 identity:
   name: list_posts
-  author: TenTen
+  author: tenten
   label:
     en_US: List Posts
     zh_Hans: 查询帖子列表

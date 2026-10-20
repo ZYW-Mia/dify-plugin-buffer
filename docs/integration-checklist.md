@@ -1,6 +1,10 @@
 # Manual integration checklist
 
-The automated test suite uses HTTP mocks and an official documentation contract snapshot. Complete these checks against a real account before release. Use a test social channel for writes.
+The maintainer confirmed completion of real Dify installation, Buffer OAuth authorization, and real posting verification on October 20, 2026, and confirmed the Plugin Developer Agreement. These are maintainer-reported integration results; automated tests separately use HTTP mocks and an official documentation contract snapshot.
+
+The release fix changes the internal author ID from `TenTen` to `tenten` to meet the daemon's lowercase identifier rules. The community author remains **TenTen**. Install and reconnect the matching package when migrating between author namespaces.
+
+The following procedure is retained as a repeatable regression checklist. It is not a list of pending release gates. Use a test social channel for writes.
 
 - Install the generated package into a running Dify instance and confirm all eight tools appear.
 - Configure a private Buffer App Client and register the exact HTTPS callback URL displayed by Dify.

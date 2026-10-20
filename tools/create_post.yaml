@@ -1,6 +1,6 @@
 identity:
   name: create_post
-  author: TenTen
+  author: tenten
   label:
     en_US: Create Post
     zh_Hans: 创建帖子

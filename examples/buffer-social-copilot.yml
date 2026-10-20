@@ -508,7 +508,7 @@ workflow:
               type: array
           type: object
         params: {}
-        provider_id: TenTen/buffer/buffer
+        provider_id: tenten/buffer/buffer
         provider_name: buffer
         provider_type: builtin
         retry_config:
@@ -649,7 +649,7 @@ workflow:
               type: integer
           type: object
         params: {}
-        provider_id: TenTen/buffer/buffer
+        provider_id: tenten/buffer/buffer
         provider_name: buffer
         provider_type: builtin
         retry_config:
@@ -1063,7 +1063,7 @@ workflow:
               type: string
           type: object
         params: {}
-        provider_id: TenTen/buffer/buffer
+        provider_id: tenten/buffer/buffer
         provider_name: buffer
         provider_type: builtin
         retry_config:
@@ -1230,7 +1230,7 @@ workflow:
       width: 242
       zIndex: 0
     - data:
-        author: TenTen
+        author: tenten
         desc: ''
         height: 300
         selected: false
@@ -1258,7 +1258,7 @@ workflow:
       width: 630
       zIndex: 0
     - data:
-        author: TenTen
+        author: tenten
         desc: ''
         height: 300
         selected: false
@@ -1286,7 +1286,7 @@ workflow:
       width: 900
       zIndex: 0
     - data:
-        author: TenTen
+        author: tenten
         desc: ''
         height: 300
         selected: false
@@ -1315,7 +1315,7 @@ workflow:
       width: 950
       zIndex: 0
     - data:
-        author: TenTen
+        author: tenten
         desc: ''
         height: 300
         selected: false

@@ -12,6 +12,8 @@ from pathlib import Path
 from dify_plugin import DifyPluginEnv
 from dify_plugin.core.plugin_registration import PluginRegistration
 
+from scripts.validate import validate_plugin_identity
+
 ROOT = Path(__file__).resolve().parents[1]
 ROOT_FILES = ("manifest.yaml", "main.py", "requirements.txt", "README.md", "PRIVACY.md", "LICENSE")
 SOURCE_DIRS = ("common", "provider", "tools", "_assets", "readme", "docs")
@@ -39,6 +41,7 @@ def build(root: Path = ROOT) -> Path:
     original_cwd = Path.cwd()
     try:
         os.chdir(root)
+        validate_plugin_identity(root)
         registration = PluginRegistration(DifyPluginEnv())
         version = registration.configuration.version
         files = package_files(root)

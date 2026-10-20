@@ -1,6 +1,6 @@
 identity:
   name: list_organizations
-  author: TenTen
+  author: tenten
   label:
     en_US: List Organizations
     zh_Hans: 查询组织
